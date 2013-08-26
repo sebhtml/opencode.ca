@@ -1,0 +1,10 @@
+
+mpiexec -n 32
+
+mpiexec -n 1 -mini-ranks-per-rank 31
+
+-show-communication-events
+
+-run-profiler -with-profiler-details
+
+

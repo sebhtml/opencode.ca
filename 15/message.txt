@@ -1,0 +1,28 @@
+
+
+Titre: Déboguer une application de calcul distribué en C++ avec RayPlatform
+Date: 2013-09-24
+Programmeur: Sébastien Boisvert
+Durée: 15 minutes
+
+Résumé:
+
+La programmation de logiciels distribués en utilisant le passage de messages peut s'avérer
+être une tâche ardue. Le standard MPI (acronyme anglophone pour Message Passing Interface)
+est utilisé pour programmer des logiciels C++ distribués pour les superordinateurs. MPI permet
+de faire des logiciels qui peuvent s'exécuter sur des centaines de milliers de processeurs,
+mais est relativement difficile à utiliser.
+
+RayPlatform est un cadre de développement et un engin d'exécution par dessus MPI pour créer des
+logiciels parallèles. Dans cet exposé de 15 minutes, quelques options de déboguage disponibles dans
+RayPlatform seront présentées. Le logiciel Ray -- un outil pour le calcul scientifique en génétique --
+sera utilisé car il est programmé avec RayPlatform.
+
+Les fonctionnalités qui seront montrées sont le traceur en temps réel d'événements de communication
+et le profileur (accumulateur) pour voir ce qui se passe à l'intérieur du superviseur
+(exemple: granularité des appels en microsecondes).
+
+https://github.com/sebhtml/RayPlatform
+
+
+
