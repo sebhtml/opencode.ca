@@ -1,10 +1,22 @@
+S. Boisvert
+20 minutes
 
-mpiexec -n 32
+Message
 
-mpiexec -n 1 -mini-ranks-per-rank 31
+mpiexec -n 32 date -o T2
+
+allouer 8 machines chez Calcul Québec (colosse)
+
+mpiexec -n 64 Ray -detect-sequence-files BigData -o T3
+
+mpiexec -n 8 Ray -mini-ranks-per-rank 7 -detect-sequence-files BigData -o T5
+
+Chasser les bogues parallèles non-déterministes !
 
 -show-communication-events
 
 -run-profiler -with-profiler-details
+
+-read-write-checkpoints GameSave.state
 
 
