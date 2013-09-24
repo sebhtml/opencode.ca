@@ -1,0 +1,43 @@
+job 10461298
+
+AName: opencode-2013-09-24
+State: Idle 
+Creds:  user:sboisver12  group:nne-790-01  account:nne-790-ac  class:short  qos:SPJ1024
+WallTime:   00:00:00 of 12:00:00
+BecameEligible: Tue Sep 24 15:40:56
+SubmitTime: Tue Sep 24 15:40:51
+  (Time Queued  Total: 00:15:10  Eligible: 00:14:51)
+
+NodeMatchPolicy: EXACTNODE
+Total Requested Tasks: 64
+
+Req[0]  TaskCount: 64  Partition: ALL
+Opsys: ---  Arch: ---  Features: short
+
+Reserved Nodes:  (3:05:42 -> 15:05:42  Duration: 12:00:00)
+[r104-n88:8][r104-n89:8][r104-n90:8][r104-n92:8][r105-n3:8][r105-n4:8]
+[r105-n9:8][r105-n10:8]
+
+
+SystemID:   colosse
+SystemJID:  10461298
+Notification Events: JobStart,JobEnd,JobFail  Notification Address: sebastien.boisvert.3@ulaval.ca
+
+IWD:            /home/sboisver12/git-clones/opencode.ca/15
+SubmitDir:      $HOME/git-clones/opencode.ca/15
+Executable:     /opt/moab/spool/moab.job.NbthRH
+
+BypassCount:    2
+Flags:          GLOBALQUEUE
+Attr:           checkpoint
+StartPriority:  315
+Reservation '10461298' (3:05:42 -> 15:05:42  Duration: 12:00:00)
+rejected for Features     - (null)
+rejected for State        - (null)
+rejected for Reserved     - (null)
+NOTE:  job req cannot run in partition torque (available procs do not meet requirements : 0 of 64 procs found)
+idle procs: 672  feasible procs:   0
+
+Node Rejection Summary: [Features: 2][State: 876][Reserved: 82]
+
+
