@@ -1,2 +1,2 @@
 all:
-	landslide README.md
+	landslide --embed README.md
