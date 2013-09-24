@@ -1,9 +1,10 @@
 # Déboguer une application de calcul distribué en C++ avec RayPlatform
 
--
--
--
--
+
+<br />
+<br />
+<br />
+
 
 - opencode.ca 15
 	- Date: 2013-09-24
@@ -114,10 +115,15 @@ mpiexec -n 16 date
 
 - sur colosse:
 
+<pre>
 module use /rap/nne-790-ab/modulefiles
 module load nne-790-ab/seb-devtools/1.0.0
 
-mpiexec --prefix /software/MPI/openmpi/1.6.4_gcc -n 64  -hostfile Nodes.txt date
+	mpiexec --prefix /software/MPI/openmpi/1.6.4_gcc -n 64 \
+	 -hostfile Nodes.txt date
+</pre>
+
+- voir command.sh
 
 ---
 

@@ -1269,8 +1269,9 @@ aside {
             <header><h1>Déboguer une application de calcul distribué en C++ avec RayPlatform</h1></header>
             
             
-            <section><h2>-</h2>
-<h2>-</h2>
+            <section><p><br />
+<br />
+<br /></p>
 <ul>
 <li>opencode.ca 15<ul>
 <li>Date: 2013-09-24</li>
@@ -1601,7 +1602,21 @@ aside {
             <header><h1>Lancer mpiexec</h1></header>
             
             
-            <section><p>mpiexec -n 32 date -machinefile Machines.txt -o T2</p></section>
+            <section><p>mpiexec -n 16 date</p>
+<ul>
+<li>sur colosse:</li>
+</ul>
+<pre>
+module use /rap/nne-790-ab/modulefiles
+module load nne-790-ab/seb-devtools/1.0.0
+
+    mpiexec --prefix /software/MPI/openmpi/1.6.4_gcc -n 64 \
+     -hostfile Nodes.txt date
+</pre>
+
+<ul>
+<li>voir command.sh</li>
+</ul></section>
             
           </div>
           <div class="presenter_notes">
