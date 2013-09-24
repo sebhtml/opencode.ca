@@ -1,0 +1,38 @@
+job 10461298
+
+AName: opencode-2013-09-24
+State: Running 
+Creds:  user:sboisver12  group:nne-790-01  account:nne-790-ac  class:short  qos:SPJ1024
+WallTime:   00:03:50 of 12:00:00
+BecameEligible: Tue Sep 24 15:40:56
+SubmitTime: Tue Sep 24 15:40:51
+  (Time Queued  Total: 00:15:47  Eligible: 00:15:44)
+
+StartTime: Tue Sep 24 15:56:38
+NodeMatchPolicy: EXACTNODE
+Total Requested Tasks: 64
+
+Req[0]  TaskCount: 64  Partition: torque
+Opsys: ---  Arch: ---  Features: short
+
+Allocated Nodes:
+[r103-n18:8][r103-n38:8][r103-n70:8][r103-n71:8]
+[r103-n73:8][r102-n94:8][r104-n35:8][r104-n36:8]
+
+
+
+SystemID:   colosse
+SystemJID:  10461298
+Notification Events: JobStart,JobEnd,JobFail  Notification Address: sebastien.boisvert.3@ulaval.ca
+
+IWD:            /home/sboisver12/git-clones/opencode.ca/15
+SubmitDir:      $HOME/git-clones/opencode.ca/15
+Executable:     /opt/moab/spool/moab.job.NbthRH
+
+StartCount:     1
+BypassCount:    3
+Flags:          GLOBALQUEUE
+Attr:           checkpoint
+StartPriority:  315
+Reservation '10461298' (-00:03:57 -> 11:56:03  Duration: 12:00:00)
+

@@ -110,7 +110,14 @@
 
 # Lancer mpiexec
 
-mpiexec -n 32 date -machinefile Machines.txt -o T2
+mpiexec -n 16 date
+
+- sur colosse:
+
+module use /rap/nne-790-ab/modulefiles
+module load nne-790-ab/seb-devtools/1.0.0
+
+mpiexec --prefix /software/MPI/openmpi/1.6.4_gcc -n 64  -hostfile Nodes.txt date
 
 ---
 
