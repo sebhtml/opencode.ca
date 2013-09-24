@@ -1297,7 +1297,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              1/16
+              1/17
             </aside>
           </footer>
         </div>
@@ -1332,7 +1332,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              2/16
+              2/17
             </aside>
           </footer>
         </div>
@@ -1370,7 +1370,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              3/16
+              3/17
             </aside>
           </footer>
         </div>
@@ -1381,25 +1381,17 @@ aside {
         <div class="slide">
           <div class="inner">
             
-            <header><h1>Acteur</h1></header>
+            <header><h1>D'où viennent les acteurs</h1></header>
             
             
             <section><ul>
 <li>
 <p>D'où ça vient ?</p>
 <ul>
-<li>Carl Hewitt, Peter Bishop, Richard Steiger (1973) http://dl.acm.org/citation.cfm?id=1624804</li>
-<li>Gul Agha 1986 http://dl.acm.org/citation.cfm?id=7929</li>
-<li>http://en.wikipedia.org/wiki/Actor_model</li>
-<li>http://channel9.msdn.com/Shows/Going+Deep/Hewitt-Meijer-and-Szyperski-The-Actor-Model-everything-you-wanted-to-know-but-were-afraid-to-ask</li>
-</ul>
-</li>
-<li>
-<p>quand un acteur reçoit un message, il peut:</p>
-<ul>
-<li>envoyer des messages</li>
-<li>créer des acteurs</li>
-<li>changer son comportement</li>
+<li><a href="http://dl.acm.org/citation.cfm?id=1624804">Carl Hewitt, Peter Bishop, Richard Steiger (1973)</a></li>
+<li><a href="http://dl.acm.org/citation.cfm?id=7929">Gul Agha 1986</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Actor_model">Wikipedia</a></li>
+<li><a href="http://channel9.msdn.com/Shows/Going+Deep/Hewitt-Meijer-and-Szyperski-The-Actor-Model-everything-you-wanted-to-know-but-were-afraid-to-ask">Channel 9</a></li>
 </ul>
 </li>
 <li>
@@ -1425,7 +1417,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              4/16
+              4/17
             </aside>
           </footer>
         </div>
@@ -1433,22 +1425,19 @@ aside {
       
       <!-- slide source: README.md -->
       <div class="slide-wrapper">
-        <div class="slide has_code">
+        <div class="slide">
           <div class="inner">
             
-            <header><h1>Boucle principale d'un acteur (scala)</h1></header>
+            <header><h1>Acteur</h1></header>
             
             
-            <section><div class="highlight"><pre><span class="lineno">1</span> <span class="n">loop</span> <span class="o">{</span>
-<span class="lineno">2</span>   <span class="n">react</span> <span class="o">{</span>
-<span class="lineno">3</span>     <span class="k">case</span> <span class="n">A</span> <span class="k">=&gt;</span> <span class="o">...</span>
-<span class="lineno">4</span>     <span class="k">case</span> <span class="n">B</span> <span class="k">=&gt;</span> <span class="o">...</span>
-<span class="lineno">5</span>   <span class="o">}</span>
-<span class="lineno">6</span> <span class="o">}</span>
-</pre></div>
-
-<ul>
-<li>loop / react ne peut rien faire si aucun message n'est reçu</li>
+            <section><ul>
+<li>quand un acteur reçoit un message, il peut:<ul>
+<li>envoyer des messages</li>
+<li>créer des acteurs</li>
+<li>changer son comportement</li>
+</ul>
+</li>
 </ul></section>
             
           </div>
@@ -1465,7 +1454,53 @@ aside {
             </aside>
             
             <aside class="page_number">
-              5/16
+              5/17
+            </aside>
+          </footer>
+        </div>
+      </div>
+      
+      <!-- slide source: README.md -->
+      <div class="slide-wrapper">
+        <div class="slide has_code">
+          <div class="inner">
+            
+            <header><h1>Boucle principale d'un acteur (scala)</h1></header>
+            
+            
+            <section><div class="highlight"><pre><span class="lineno">1</span> <span class="n">loop</span> <span class="o">{</span>
+<span class="lineno">2</span>   <span class="n">react</span> <span class="o">{</span>
+<span class="lineno">3</span>     <span class="k">case</span> <span class="n">A</span> <span class="k">=&gt;</span>
+<span class="lineno">4</span>             <span class="n">sender</span> <span class="o">!</span> <span class="nc">PongMessage</span>
+<span class="lineno">5</span>     <span class="k">case</span> <span class="n">B</span> <span class="k">=&gt;</span> <span class="o">...</span>
+<span class="lineno">6</span>   <span class="o">}</span>
+<span class="lineno">7</span> <span class="o">}</span>
+</pre></div>
+
+<ul>
+<li>
+<p>loop / react ne peut rien faire si aucun message n'est reçu</p>
+</li>
+<li>
+<p><a href="http://www.scala-lang.org/old/node/242">scala-lang.org</a></p>
+</li>
+</ul></section>
+            
+          </div>
+          <div class="presenter_notes">
+            <header><h1>Presenter Notes</h1></header>
+            <section>
+            
+            </section>
+          </div>
+          <footer>
+            
+            <aside class="source">
+              Source: <a href="README.md">README.md</a>
+            </aside>
+            
+            <aside class="page_number">
+              6/17
             </aside>
           </footer>
         </div>
@@ -1511,7 +1546,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              6/16
+              7/17
             </aside>
           </footer>
         </div>
@@ -1554,7 +1589,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              7/16
+              8/17
             </aside>
           </footer>
         </div>
@@ -1568,7 +1603,7 @@ aside {
             <header><h1>Lancer mpiexec</h1></header>
             
             
-            <section><p>mpiexec -n 32 date -o T2</p></section>
+            <section><p>mpiexec -n 32 date -machinefile Machines.txt -o T2</p></section>
             
           </div>
           <div class="presenter_notes">
@@ -1584,7 +1619,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              8/16
+              9/17
             </aside>
           </footer>
         </div>
@@ -1614,7 +1649,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              9/16
+              10/17
             </aside>
           </footer>
         </div>
@@ -1644,7 +1679,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              10/16
+              11/17
             </aside>
           </footer>
         </div>
@@ -1672,7 +1707,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              11/16
+              12/17
             </aside>
           </footer>
         </div>
@@ -1700,7 +1735,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              12/16
+              13/17
             </aside>
           </footer>
         </div>
@@ -1728,7 +1763,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              13/16
+              14/17
             </aside>
           </footer>
         </div>
@@ -1756,7 +1791,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              14/16
+              15/17
             </aside>
           </footer>
         </div>
@@ -1784,7 +1819,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              15/16
+              16/17
             </aside>
           </footer>
         </div>
@@ -1812,7 +1847,7 @@ aside {
             </aside>
             
             <aside class="page_number">
-              16/16
+              17/17
             </aside>
           </footer>
         </div>
@@ -1834,7 +1869,7 @@ aside {
           <footer>
             
             <aside class="page_number">
-              /16
+              /17
             </aside>
           </footer>
         </div>
@@ -1867,80 +1902,86 @@ aside {
       
       
       <tr id="toc-row-4">
-        <th><a href="#slide4">Acteur</a></th>
+        <th><a href="#slide4">D'où viennent les acteurs</a></th>
         <td><a href="#slide4">4</a></td>
       </tr>
       
       
       <tr id="toc-row-5">
-        <th><a href="#slide5">Boucle principale d'un acteur (scala)</a></th>
+        <th><a href="#slide5">Acteur</a></th>
         <td><a href="#slide5">5</a></td>
       </tr>
       
       
       <tr id="toc-row-6">
-        <th><a href="#slide6">Observations</a></th>
+        <th><a href="#slide6">Boucle principale d'un acteur (scala)</a></th>
         <td><a href="#slide6">6</a></td>
       </tr>
       
       
       <tr id="toc-row-7">
-        <th><a href="#slide7">Message Passing Interface</a></th>
+        <th><a href="#slide7">Observations</a></th>
         <td><a href="#slide7">7</a></td>
       </tr>
       
       
       <tr id="toc-row-8">
-        <th><a href="#slide8">Lancer mpiexec</a></th>
+        <th><a href="#slide8">Message Passing Interface</a></th>
         <td><a href="#slide8">8</a></td>
       </tr>
       
       
       <tr id="toc-row-9">
-        <th><a href="#slide9">assembler un casse-tête</a></th>
+        <th><a href="#slide9">Lancer mpiexec</a></th>
         <td><a href="#slide9">9</a></td>
       </tr>
       
       
       <tr id="toc-row-10">
-        <th><a href="#slide10">plus d'acteurs par processus</a></th>
+        <th><a href="#slide10">assembler un casse-tête</a></th>
         <td><a href="#slide10">10</a></td>
       </tr>
       
       
       <tr id="toc-row-11">
-        <th><a href="#slide11">Chasser les bogues parallèles non-déterministes !</a></th>
+        <th><a href="#slide11">plus d'acteurs par processus</a></th>
         <td><a href="#slide11">11</a></td>
       </tr>
       
       
       <tr id="toc-row-12">
-        <th><a href="#slide12">-show-communication-events</a></th>
+        <th><a href="#slide12">Chasser les bogues parallèles non-déterministes !</a></th>
         <td><a href="#slide12">12</a></td>
       </tr>
       
       
       <tr id="toc-row-13">
-        <th><a href="#slide13">-run-profiler -with-profiler-details</a></th>
+        <th><a href="#slide13">-show-communication-events</a></th>
         <td><a href="#slide13">13</a></td>
       </tr>
       
       
       <tr id="toc-row-14">
-        <th><a href="#slide14">-write-scheduling-data</a></th>
+        <th><a href="#slide14">-run-profiler -with-profiler-details</a></th>
         <td><a href="#slide14">14</a></td>
       </tr>
       
       
       <tr id="toc-row-15">
-        <th><a href="#slide15">-read-write-checkpoints GameSave.state</a></th>
+        <th><a href="#slide15">-write-scheduling-data</a></th>
         <td><a href="#slide15">15</a></td>
       </tr>
       
       
       <tr id="toc-row-16">
-        <th><a href="#slide16">-write-plugin-data</a></th>
+        <th><a href="#slide16">-read-write-checkpoints GameSave.state</a></th>
         <td><a href="#slide16">16</a></td>
+      </tr>
+      
+      
+      <tr id="toc-row-17">
+        <th><a href="#slide17">-write-plugin-data</a></th>
+        <td><a href="#slide17">17</a></td>
       </tr>
       
       

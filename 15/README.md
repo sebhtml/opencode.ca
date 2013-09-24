@@ -35,22 +35,26 @@
 
 ---
 
-# Acteur
+# D'où viennent les acteurs
 
 - D'où ça vient ?
-	- Carl Hewitt, Peter Bishop, Richard Steiger (1973) http://dl.acm.org/citation.cfm?id=1624804
-	- Gul Agha 1986 http://dl.acm.org/citation.cfm?id=7929
-	- http://en.wikipedia.org/wiki/Actor\_model
-	- http://channel9.msdn.com/Shows/Going+Deep/Hewitt-Meijer-and-Szyperski-The-Actor-Model-everything-you-wanted-to-know-but-were-afraid-to-ask
+	- [Carl Hewitt, Peter Bishop, Richard Steiger (1973)](http://dl.acm.org/citation.cfm?id=1624804)
+	- [Gul Agha 1986](http://dl.acm.org/citation.cfm?id=7929)
+	- [Wikipedia](http://en.wikipedia.org/wiki/Actor\_model)
+	- [Channel 9](http://channel9.msdn.com/Shows/Going+Deep/Hewitt-Meijer-and-Szyperski-The-Actor-Model-everything-you-wanted-to-know-but-were-afraid-to-ask)
+
+- Deux langages populaires
+	- erlang
+	- scala
+
+---
+
+# Acteur
 
 - quand un acteur reçoit un message, il peut:
 	- envoyer des messages
 	- créer des acteurs
 	- changer son comportement
-
-- Deux langages populaires
-	- erlang
-	- scala
 
 ---
 
@@ -59,13 +63,16 @@
 	!scala
 	loop {
 	  react {
-	    case A => ...
+	    case A =>
+                sender ! PongMessage
 	    case B => ...
 	  }
 	}
 
 
 - loop / react ne peut rien faire si aucun message n'est reçu
+
+- [scala-lang.org](http://www.scala-lang.org/old/node/242)
 
 ---
 
@@ -104,7 +111,7 @@
 
 # Lancer mpiexec
 
-mpiexec -n 32 date -o T2
+mpiexec -n 32 date -machinefile Machines.txt -o T2
 
 ---
 
