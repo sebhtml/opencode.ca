@@ -6,11 +6,10 @@
 -
 
 - opencode.ca 15
-
 	- Date: 2013-09-24
 	- Sébastien Boisvert
 	- Durée: 15 minutes
-	- http://sebhtml.github.io/opencode.ca/15/presentation.html
+	- [github.io](http://sebhtml.github.io/opencode.ca/15/presentation.html)
 
 
 ---
@@ -26,7 +25,7 @@
 
 # Message
 
-- Contient:
+- est composé de:
 	- Source
 	- Destination
 	- Sujet
