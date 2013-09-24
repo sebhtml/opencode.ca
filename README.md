@@ -11,4 +11,4 @@ Published with this trick:
 
 git symbolic-ref "refs/heads/gh-pages" "refs/heads/master"
 
-git push --mirror github master
+git push --mirror 
