@@ -88,7 +88,33 @@
            (matrix-column-count similarity-matrix)
            )
 
-  (matrix-print-rows matrix 0)
+  ;(matrix-print-rows matrix 0)
+
+  (let*
+      (
+       (row 0)
+       (column 0)
+       (row-count (matrix-row-count matrix))
+       (column-count (matrix-column-count matrix))
+       )
+
+    (while (< row row-count)
+      (while (< column column-count)
+        (let*
+            (
+             ;(value (matrix-get-cell matrix row column))
+             (value 0)
+             )
+          (princ (format " %d" value))
+          )
+
+        (setq column (+ column 1))
+        )
+      (princ "\n")
+      (setq row (+ row 1))
+      (setq column 0)
+      )
+    )
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -134,14 +160,14 @@
        (row-count (matrix-row-count matrix))
        )
     (while (< row row-count)
-      (message "Row %d" row)
+      ;(message "Row %d" row)
       (let*
           (
            (column 0)
            (column-count (matrix-column-count matrix))
            )
         (while (< column column-count)
-          (message "Column %d" column)
+          ;(message "Column %d" column)
           (setq column (+ column 1))
           )
         )
