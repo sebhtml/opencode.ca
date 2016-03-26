@@ -23,10 +23,9 @@
   (message "File: %s"
            (document-file-path document)
            )
-  (message "    Characters: %d"
-           (document-content-length document)
-           )
-  (message "    Words: %d"
+  (message "    Words %d"
+   ;"    Characters: %d Words: %d"
+           ;(document-content-length document)
            (document-sequence-length document)
            )
   )
@@ -35,7 +34,7 @@
 ; matrix
 
 (defun make-matrix (row-count column-count)
-  (message "make-matrix row-count %d column-count %d" row-count column-count)
+  ;(message "make-matrix row-count %d column-count %d" row-count column-count)
   (let*
       (
        (row-list (make-list column-count 0))
@@ -43,8 +42,8 @@
        (rows (make-list row-count row-vector))
        (matrix (vconcat (vector) rows))
        )
-    (message "row-list length %d" (length row-list))
-    (message "row-vector length %d" (length row-vector))
+    ;(message "row-list length %d" (length row-list))
+    ;(message "row-vector length %d" (length row-vector))
     matrix
     )
   )
@@ -79,6 +78,12 @@
   )
 
 (defun matrix-print (matrix)
+
+  (message "Matrix rows: %d columns: %d"
+           (matrix-row-count similarity-matrix)
+           (matrix-column-count similarity-matrix)
+           )
+
   (matrix-print-rows matrix 0)
   )
 
@@ -107,7 +112,8 @@
   (let*
       (
        (content (get-string-from-file file-path))
-       (sequence (split-string content))
+       (sequence-list (split-string content))
+       (sequence (vconcat (vector) sequence-list))
        )
     (make-document
      :file-path file-path
@@ -140,7 +146,7 @@
          (similarity-matrix (make-similarity-matrix document-a document-b))
          )
 
-      (message "Matrix rows: %d" (matrix-row-count similarity-matrix))
+
       (matrix-print similarity-matrix)
       )
 
@@ -172,9 +178,10 @@
         (load-document
         "my-text.txt"))
        )
+
      (align-documents gnu-emacs-wikipedia-page my-text)
-     (align-documents spacemacs-github-page my-text)
-     (align-documents spacemacs-twitter-page my-text)
+     ;(align-documents spacemacs-github-page my-text)
+     ;(align-documents spacemacs-twitter-page my-text)
   ))
 
 
