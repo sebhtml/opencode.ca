@@ -26,9 +26,20 @@
        )
 
     (message
-     "Alignment of %s (%d characters, %d words) and %s (%d characters, %d words)\n"
-     document-a-file-path 0 0
-     document-b-file-path 0 0
+     "Alignment"
+     )
+    (message "Document A: %s"
+             document-a-file-path
+             )
+    (message "    %d characters, %d words"
+             (length document-a-content) 0
+             )
+
+    (message "Document B: %s"
+             document-b-file-path
+             )
+    (message "    %d characters, %d words"
+             (length document-b-content) 0
      )
        ))
 
