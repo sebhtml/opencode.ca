@@ -17,12 +17,15 @@
 
 (defun
     align-documents (document-a document-b)
-  (let
+  (let*
       (
        (document-a-file-path (car document-a))
        (document-a-content (cdr document-a))
        (document-b-file-path (car document-b))
        (document-b-content (cdr document-b))
+
+       (document-a-sequence (split-string document-a-content " "))
+       (document-b-sequence (split-string document-b-content " "))
        )
 
     (message
@@ -32,14 +35,14 @@
              document-a-file-path
              )
     (message "    %d characters, %d words"
-             (length document-a-content) 0
+             (length document-a-content) (length document-a-sequence)
              )
 
     (message "Document B: %s"
              document-b-file-path
              )
     (message "    %d characters, %d words"
-             (length document-b-content) 0
+             (length document-b-content) (length document-b-sequence)
      )
        ))
 
