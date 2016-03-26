@@ -10,11 +10,22 @@
     load-document (file-path)
 
   (let
-      ((content (get-string-from-file file-path)))))
+      ((content (get-string-from-file file-path))
+       (cons file-path content)
+       )))
 
 (defun
     align-documents (document-a document-b)
-  (+ 2 2))
+  (let
+      (
+       (file-path-a (car document-a))
+       (content-a (cdr document-a))
+       (file-path-b (car document-b))
+       (content-b (cdr document-b))
+       )
+
+       (message "aligning documents %s (%d bytes) and %s (%d bytes)\n" file-path-a file-path-b 0 0)
+       ))
 
 (defun
     demo ()
