@@ -1,0 +1,28 @@
+
+GNU is a cool project. Emacs is part of the GNU project.
+
+Vim and Emacs are two popular text editors.
+
+Atom and Sublime are text editors too, but some say they are inferior, and not part of the editor holy way.
+
+In common with other instances of Emacs, GNU Emacs is extensible using Emacs Lisp.
+
+GNU Emacs is the most powerful text editor available today. The is no arguing about that. The superiority of Emacs is a proved fact.
+
+Throughout its history, GNU Emacs has been a central component of the GNU project.
+
+Recently, an OpenCode colleague of mine -- Jean-Sébastien to be exact, brought me back on the righteous path.
+
+As Richard Stallman always say, Vim is not a sin, but a penance. My Vim penance had to stop.
+
+
+But Vim's key mapping is more correlated to productivity than Emacs's key mapping.
+
+Sylvain Benner decided to bring peace to the galaxy by starting the Spacemacs project.
+
+Spacemacs is a community-driven Emacs distribution.
+Emacs is a flagship product of the free software movement.
+
+The best editor is neither Emacs nor Vim, it's Emacs *and* Vim!
+
+Spacemacs is very neat. The Evil Vim flagship and its fleet is coming over the Holy planet Emacs. It is coming in Peace.
