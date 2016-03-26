@@ -55,6 +55,10 @@
   (length (aref matrix 0))
   )
 
+(defun matrix-set-cell (matrix row column value)
+  ;(aset (aref matrix row) column value)
+  )
+
 (defun matrix-get-cell (matrix row column)
   (aref (aref matrix row) column))
 
@@ -87,6 +91,66 @@
   (matrix-print-rows matrix 0)
   )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; similarity matrix
+
+(defun populate-similarity-matrix-row-column (document-a document-b matrix row column)
+  (let*
+      (
+       (sequence-a (document-sequence document-a))
+       (sequence-b (document-sequence document-b))
+       (word-a (aref sequence-a row))
+       (word-b (aref sequence-b column))
+       ;(match (if (= word-a word-b) 1 0))
+       )
+    ;(matrix-set-cell matrix row column match)
+    )
+  )
+
+(defun populate-similarity-matrix-row-columns (document-a document-b matrix row column)
+  (if (< column (matrix-column-count matrix))
+      (progn
+        (populate-similarity-matrix-row-column document-a document-b matrix row column)
+        (populate-similarity-matrix-row-columns document-a document-b matrix row (+ column 1)))
+    ))
+
+(defun populate-similarity-matrix-row (document-a document-b matrix row)
+  (populate-similarity-matrix-row-columns document-a document-b matrix row 0)
+  )
+
+(defun populate-similarity-matrix-rows (document-a document-b matrix row)
+  (if (< row (matrix-row-count matrix))
+      (progn
+        (populate-similarity-matrix-row document-a document-b matrix row)
+        (populate-similarity-matrix-rows document-a document-b matrix (+ row 1)))))
+
+(defun populate-similarity-matrix-slow (document-a document-b matrix)
+  (populate-similarity-matrix-rows document-a document-b matrix 0))
+
+(defun populate-similarity-matrix (document-a document-b matrix)
+  (let*
+      (
+       (row 0)
+       (row-count (matrix-row-count matrix))
+       )
+    (while (< row row-count)
+      (message "Row %d" row)
+      (let*
+          (
+           (column 0)
+           (column-count (matrix-column-count matrix))
+           )
+        (while (< column column-count)
+          (message "Column %d" column)
+          (setq column (+ column 1))
+          )
+        )
+      (setq row (+ row 1))
+      )
+
+    )
+  )
+
 (defun make-similarity-matrix (document-a document-b)
   (let*
       (
@@ -94,6 +158,7 @@
        (column-count (document-sequence-length document-b))
        (matrix (make-matrix row-count column-count))
        )
+    (populate-similarity-matrix document-a document-b matrix)
     matrix
     )
   )
