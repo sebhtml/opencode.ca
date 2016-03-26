@@ -24,6 +24,12 @@
        (document-b-file-path (car document-b))
        (document-b-content (cdr document-b))
        )
+
+    (message
+     "Alignment of %s (%d characters, %d words) and %s (%d characters, %d words)\n"
+     document-a-file-path 0 0
+     document-b-file-path 0 0
+     )
        ))
 
 (defun
