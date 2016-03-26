@@ -1,5 +1,38 @@
+(require 'cl)
+
+; class document
+
+(cl-defstruct document
+  file-path
+  content
+  sequence
+  )
+
+(defun
+    document-content-length (document)
+  (length (document-content document)))
+
+(defun
+    document-sequence-length (document)
+  (length (document-sequence document)))
+
+(defun
+    document-print (document)
+
+  (message "File: %s"
+           (document-file-path document-b)
+           )
+  (message "    Characters: %d"
+           (document-content-length document-b)
+           )
+  (message "    Words: %d"
+           (document-sequence-length document-b)
+           )
 
 
+  )
+
+; stuff
 (defun
     get-string-from-file (file-path)
   (with-temp-buffer
@@ -9,42 +42,41 @@
 (defun
     load-document (file-path)
 
-  (let
-      ((content (get-string-from-file file-path))
+  (let*
+      (
+       (content (get-string-from-file file-path))
+       (sequence (split-string content))
        )
-       (cons file-path content)
+    (make-document
+     :file-path file-path
+     :content content
+     :sequence sequence
+     )
        ))
 
 (defun
     align-documents (document-a document-b)
-  (let*
-      (
-       (document-a-file-path (car document-a))
-       (document-a-content (cdr document-a))
-       (document-b-file-path (car document-b))
-       (document-b-content (cdr document-b))
 
-       (document-a-sequence (split-string document-a-content " "))
-       (document-b-sequence (split-string document-b-content " "))
-       )
-
+  (message
+   "------------------------------------------------------------------------------")
     (message
      "Alignment"
      )
-    (message "Document A: %s"
-             document-a-file-path
-             )
-    (message "    %d characters, %d words"
-             (length document-a-content) (length document-a-sequence)
-             )
+    (message "")
 
-    (message "Document B: %s"
-             document-b-file-path
-             )
-    (message "    %d characters, %d words"
-             (length document-b-content) (length document-b-sequence)
-     )
-       ))
+    (message "Document A")
+    (document-print document-a)
+    (message "")
+
+    (message "Document B")
+    (document-print document-b)
+    (message "")
+
+    (message
+     "End of alignment")
+    (message "")
+    ; TODO...
+       )
 
 (defun
     demo ()
@@ -68,6 +100,8 @@
         "my-text.txt"))
        )
      (align-documents gnu-emacs-wikipedia-page my-text)
+     (align-documents spacemacs-github-page my-text)
+     (align-documents spacemacs-twitter-page my-text)
   ))
 
 
