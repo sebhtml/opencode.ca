@@ -1,5 +1,9 @@
 (require 'cl)
 
+(setq max-specpdl-size 999999)
+(setq max-lisp-eval-depth 999999)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; class document
 
 (cl-defstruct document
@@ -8,39 +12,97 @@
   sequence
   )
 
-(defun
-    document-content-length (document)
+(defun document-content-length (document)
   (length (document-content document)))
 
-(defun
-    document-sequence-length (document)
+(defun document-sequence-length (document)
   (length (document-sequence document)))
 
-(defun
-    document-print (document)
+(defun document-print (document)
 
   (message "File: %s"
-           (document-file-path document-b)
+           (document-file-path document)
            )
   (message "    Characters: %d"
-           (document-content-length document-b)
+           (document-content-length document)
            )
   (message "    Words: %d"
-           (document-sequence-length document-b)
+           (document-sequence-length document)
            )
-
-
   )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; matrix
+
+(defun make-matrix (row-count column-count)
+  (message "make-matrix row-count %d column-count %d" row-count column-count)
+  (let*
+      (
+       (row-list (make-list column-count 0))
+       (row-vector (vconcat (vector) row-list))
+       (rows (make-list row-count row-vector))
+       (matrix (vconcat (vector) rows))
+       )
+    (message "row-list length %d" (length row-list))
+    (message "row-vector length %d" (length row-vector))
+    matrix
+    )
+  )
+
+(defun matrix-row-count (matrix)
+  (length matrix))
+
+(defun matrix-column-count (matrix)
+  (length (aref matrix 0))
+  )
+
+(defun matrix-get-cell (matrix row column)
+  (aref (aref matrix row) column))
+
+(defun matrix-print-row (matrix row)
+  (message "Row %d" row)
+  )
+
+(defun matrix-print-rows (matrix row)
+  (let*
+      (
+       (row-count (matrix-row-count matrix))
+       )
+    (if (< row row-count)
+        (progn
+          (matrix-print-row matrix row)
+          (matrix-print-rows matrix (+ row 1))
+          )
+      nil
+      )
+    )
+  )
+
+(defun matrix-print (matrix)
+  (matrix-print-rows matrix 0)
+  )
+
+(defun make-similarity-matrix (document-a document-b)
+  (let*
+      (
+       (row-count (document-sequence-length document-a))
+       (column-count (document-sequence-length document-b))
+       (matrix (make-matrix row-count column-count))
+       )
+    matrix
+    )
+  )
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; stuff
-(defun
-    get-string-from-file (file-path)
+
+(defun get-string-from-file (file-path)
   (with-temp-buffer
     (insert-file-contents file-path)
     (buffer-string)))
 
-(defun
-    load-document (file-path)
+(defun load-document (file-path)
 
   (let*
       (
@@ -54,8 +116,7 @@
      )
        ))
 
-(defun
-    align-documents (document-a document-b)
+(defun align-documents (document-a document-b)
 
   (message
    "------------------------------------------------------------------------------")
@@ -72,14 +133,26 @@
     (document-print document-b)
     (message "")
 
+                                        ; TODO...
+
+    (let*
+        (
+         (similarity-matrix (make-similarity-matrix document-a document-b))
+         )
+
+      (message "Matrix rows: %d" (matrix-row-count similarity-matrix))
+      (matrix-print similarity-matrix)
+      )
+
     (message
      "End of alignment")
     (message "")
-    ; TODO...
+
        )
 
-(defun
-    demo ()
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; main
+(defun main()
 
   (let
       (
@@ -105,4 +178,4 @@
   ))
 
 
-(demo)
+(main)
