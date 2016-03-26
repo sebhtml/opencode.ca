@@ -11,20 +11,19 @@
 
   (let
       ((content (get-string-from-file file-path))
+       )
        (cons file-path content)
-       )))
+       ))
 
 (defun
     align-documents (document-a document-b)
   (let
       (
-       (file-path-a (car document-a))
-       (content-a (cdr document-a))
-       (file-path-b (car document-b))
-       (content-b (cdr document-b))
+       (document-a-file-path (car document-a))
+       (document-a-content (cdr document-a))
+       (document-b-file-path (car document-b))
+       (document-b-content (cdr document-b))
        )
-
-       (message "aligning documents %s (%d bytes) and %s (%d bytes)\n" file-path-a file-path-b 0 0)
        ))
 
 (defun
