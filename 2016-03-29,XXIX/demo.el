@@ -118,7 +118,10 @@
              (value (matrix-get-cell matrix row column))
              ;(value 0)
              )
-          (princ (format " %d" value))
+          (if (equal value 1)
+              (princ "#")
+            (princ ".")
+              )
           )
 
         (setq column (+ column 1))
@@ -273,11 +276,11 @@
       (message "Similarity matrix")
       (matrix-print similarity-matrix)
 
-      (message "Dynamic programming matrix")
-      (matrix-print dynamic-programming-matrix)
+      ;(message "Dynamic programming matrix")
+      ;(matrix-print dynamic-programming-matrix)
 
-      (message "Direction matrix")
-      (matrix-print direction-matrix)
+      ;(message "Direction matrix")
+      ;(matrix-print direction-matrix)
       )
 
     (message
