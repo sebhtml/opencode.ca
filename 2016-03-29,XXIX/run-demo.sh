@@ -2,5 +2,5 @@
 
 emacs --script demo.el &> log.txt
 
-less log.txt
+less -S log.txt
 

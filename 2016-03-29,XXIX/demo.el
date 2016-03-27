@@ -8,6 +8,15 @@
 (setq DIRECTION-UP 1)
 (setq DIRECTION-LEFT-UP 2)
 
+(defun print-similarity-value (value)
+  (if (equal value 1)
+      (princ "#")
+    (princ ".")))
+
+(defun print-value (value)
+  (princ (format " %d" value)))
+
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; class document
 
@@ -23,13 +32,16 @@
   (length (document-sequence document)))
 
 (defun document-print (document)
-  (message "File: %s"
-           (document-file-path document))
-  (message "    Words %d"
+  (princ (format "File: %s"
+                 (document-file-path document)))
+  (terpri)
+
+  (princ (format "    Words %d"
    ;"    Characters: %d Words: %d"
            ;(document-content-length document)
-           (document-sequence-length document)
-           ))
+                 (document-sequence-length document)))
+  (terpri)
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; matrix
@@ -61,8 +73,8 @@
   ;)
 
 (defun matrix-set-cell (matrix row column value)
-  ;(message "matrix-set-cell %d %d %d" row column value)
-  ;(message "data length %d" (length (matrix-data matrix)))
+  ;(print (format "matrix-set-cell %d %d %d" row column value))
+  ;(print (format "data length %d" (length (matrix-data matrix))))
   (let*
       (
        (data (matrix-data matrix))
@@ -76,7 +88,7 @@
   (aref (matrix-data matrix) (+ (* row (matrix-column-count matrix)) column)))
 
 (defun matrix-print-row (matrix row)
-  (message "Row %d" row)
+  (print (format "Row %d" row))
   )
 
 (defun matrix-print-rows (matrix row)
@@ -94,12 +106,13 @@
     )
   )
 
-(defun matrix-print (matrix)
+(defun matrix-print (matrix print-cell-value)
 
-  (message "Matrix rows: %d columns: %d"
+  (princ (format "Matrix rows: %d columns: %d"
            (matrix-row-count similarity-matrix)
            (matrix-column-count similarity-matrix)
-           )
+           ))
+  (terpri)
 
   ;(matrix-print-rows matrix 0)
 
@@ -112,16 +125,14 @@
        )
 
     (while (< row row-count)
+      ;(print (format "DEBUG row %d" row))
       (while (< column column-count)
         (let*
             (
              (value (matrix-get-cell matrix row column))
              ;(value 0)
              )
-          (if (equal value 1)
-              (princ "#")
-            (princ ".")
-              )
+          (funcall print-cell-value value)
           )
 
         (setq column (+ column 1))
@@ -176,7 +187,7 @@
        (row-count (matrix-row-count matrix))
        )
     (while (< row row-count)
-      ;(message "Row %d" row)
+      ;(print (format "Row %d" row))
       (let*
           (
            (column 0)
@@ -197,10 +208,10 @@
                ;(match 1)
                )
 
-            ;(message "word-a %s word-b %s match %d" word-a word-b match)
+            ;(print (format "word-a %s word-b %s match %d" word-a word-b match))
             (matrix-set-cell matrix row column match)
               )
-          ;(message "Column %d" column)
+          ;(print (format "Column %d" column))
           (setq column (+ column 1))
           )
         )
@@ -218,7 +229,12 @@
     )
   )
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; DP code
 
+(defun run-dynamic_programming-code
+    (document-a document-b similarity-matrix dynamic-programming-matrix direction-matrix)
+    )
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; stuff
 
@@ -244,20 +260,20 @@
 
 (defun align-documents (document-a document-b)
 
-  (message
-   "------------------------------------------------------------------------------")
-    (message
-     "Alignment"
-     )
-    (message "")
+  (princ (format "------------------------------------------------------------------------------"))
+  (terpri)
+    (princ "Alignment"
+           )
+    (terpri)
 
-    (message "Document A")
+    (princ "Document A")
+    (terpri)
     (document-print document-a)
-    (message "")
+    (terpri)
 
-    (message "Document B")
+    (princ "Document B")
     (document-print document-b)
-    (message "")
+    (terpri)
 
                                         ; TODO...
 
@@ -273,19 +289,24 @@
 
       (populate-similarity-matrix document-a document-b similarity-matrix)
 
-      (message "Similarity matrix")
-      (matrix-print similarity-matrix)
+      (princ "Similarity matrix")
+      (terpri)
+      (matrix-print similarity-matrix 'print-similarity-value)
 
-      ;(message "Dynamic programming matrix")
-      ;(matrix-print dynamic-programming-matrix)
+      (run-dynamic_programming-code document-a document-b similarity-matrix dynamic-programming-matrix direction-matrix)
 
-      ;(message "Direction matrix")
-      ;(matrix-print direction-matrix)
+      (princ "Dynamic programming matrix")
+      (terpri)
+      (matrix-print dynamic-programming-matrix 'print-value)
+
+      (princ "Direction matrix")
+      (terpri)
+      (matrix-print direction-matrix 'print-value)
       )
 
-    (message
+    (princ
      "End of alignment")
-    (message "")
+    (terpri)
 
        )
 
