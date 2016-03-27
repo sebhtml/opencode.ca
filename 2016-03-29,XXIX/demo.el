@@ -9,8 +9,7 @@
 (cl-defstruct document
   file-path
   content
-  sequence
-  )
+  sequence)
 
 (defun document-content-length (document)
   (length (document-content document)))
@@ -33,34 +32,46 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; matrix
 
-(defun make-matrix (row-count column-count)
-  ;(message "make-matrix row-count %d column-count %d" row-count column-count)
+(cl-defstruct matrix
+  row-count
+  column-count
+  data)
+
+
+
+(defun create-matrix (row-count column-count)
   (let*
       (
-       (row-list (make-list column-count 0))
-       (row-vector (vconcat (vector) row-list))
-       (rows (make-list row-count row-vector))
-       (matrix (vconcat (vector) rows))
+       (size (* row-count column-count))
+       (my-list (make-list size 0))
+       (data (vconcat (vector) my-list))
        )
-    ;(message "row-list length %d" (length row-list))
-    ;(message "row-vector length %d" (length row-vector))
-    matrix
-    )
-  )
+    (make-matrix
+     :row-count row-count
+     :column-count column-count
+     :data data)))
 
-(defun matrix-row-count (matrix)
-  (length matrix))
+;(defun matrix-row-count (matrix)
+  ;(length matrix))
 
-(defun matrix-column-count (matrix)
-  (length (aref matrix 0))
-  )
+;(defun matrix-column-count (matrix)
+  ;(length (aref matrix 0))
+  ;)
 
 (defun matrix-set-cell (matrix row column value)
-  ;(aset (aref matrix row) column value)
-  )
+  ;(message "matrix-set-cell %d %d %d" row column value)
+  ;(message "data length %d" (length (matrix-data matrix)))
+  (let*
+      (
+       (data (matrix-data matrix))
+       ;(row-vector (aref data row))
+       (column-count (matrix-column-count matrix) )
+       (i (+ (* row column-count) column))
+       )
+    (aset data i value)))
 
 (defun matrix-get-cell (matrix row column)
-  (aref (aref matrix row) column))
+  (aref (matrix-data matrix) (+ (* row (matrix-column-count matrix)) column)))
 
 (defun matrix-print-row (matrix row)
   (message "Row %d" row)
@@ -102,8 +113,8 @@
       (while (< column column-count)
         (let*
             (
-             ;(value (matrix-get-cell matrix row column))
-             (value 0)
+             (value (matrix-get-cell matrix row column))
+             ;(value 0)
              )
           (princ (format " %d" value))
           )
@@ -167,6 +178,23 @@
            (column-count (matrix-column-count matrix))
            )
         (while (< column column-count)
+          (let*
+              (
+               (sequence-a (document-sequence document-a))
+               (sequence-b (document-sequence document-b))
+               (word-a (aref sequence-a row))
+               (word-b (aref sequence-b column))
+               (match (if
+                          (equal word-a word-b)
+                          1 0
+                          )
+                          )
+               ;(match 1)
+               )
+
+            ;(message "word-a %s word-b %s match %d" word-a word-b match)
+            (matrix-set-cell matrix row column match)
+              )
           ;(message "Column %d" column)
           (setq column (+ column 1))
           )
@@ -182,7 +210,7 @@
       (
        (row-count (document-sequence-length document-a))
        (column-count (document-sequence-length document-b))
-       (matrix (make-matrix row-count column-count))
+       (matrix (create-matrix row-count column-count))
        )
     (populate-similarity-matrix document-a document-b matrix)
     matrix
@@ -267,9 +295,13 @@
 
        (my-text
         (load-document
-        "my-text.txt"))
+         "my-text.txt"))
+
+       (hello (load-document "hello-world.txt"))
        )
 
+    ;(align-documents hello hello)
+    ;(align-documents my-text my-text)
      (align-documents gnu-emacs-wikipedia-page my-text)
      ;(align-documents spacemacs-github-page my-text)
      ;(align-documents spacemacs-twitter-page my-text)
