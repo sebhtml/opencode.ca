@@ -1,4 +1,6 @@
 #!/bin/bash
 
-emacs --script demo.el
+emacs --script demo.el &> log.txt
+
+less log.txt
 
