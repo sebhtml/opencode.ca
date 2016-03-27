@@ -3,6 +3,11 @@
 (setq max-specpdl-size 999999)
 (setq max-lisp-eval-depth 999999)
 
+(setq DIRECTION-NONE -1)
+(setq DIRECTION-LEFT 0)
+(setq DIRECTION-UP 1)
+(setq DIRECTION-LEFT-UP 2)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; class document
 
@@ -18,16 +23,13 @@
   (length (document-sequence document)))
 
 (defun document-print (document)
-
   (message "File: %s"
-           (document-file-path document)
-           )
+           (document-file-path document))
   (message "    Words %d"
    ;"    Characters: %d Words: %d"
            ;(document-content-length document)
            (document-sequence-length document)
-           )
-  )
+           ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; matrix
@@ -208,11 +210,7 @@
 (defun make-similarity-matrix (document-a document-b)
   (let*
       (
-       (row-count (document-sequence-length document-a))
-       (column-count (document-sequence-length document-b))
-       (matrix (create-matrix row-count column-count))
        )
-    (populate-similarity-matrix document-a document-b matrix)
     matrix
     )
   )
@@ -262,11 +260,24 @@
 
     (let*
         (
-         (similarity-matrix (make-similarity-matrix document-a document-b))
+         (row-count (document-sequence-length document-a))
+         (column-count (document-sequence-length document-b))
+         (similarity-matrix (create-matrix row-count column-count))
+         (dynamic-programming-matrix (create-matrix row-count column-count))
+         (direction-matrix (create-matrix row-count column-count))
+         ;(similarity-matrix (make-similarity-matrix document-a document-b))
          )
 
+      (populate-similarity-matrix document-a document-b similarity-matrix)
 
+      (message "Similarity matrix")
       (matrix-print similarity-matrix)
+
+      (message "Dynamic programming matrix")
+      (matrix-print dynamic-programming-matrix)
+
+      (message "Direction matrix")
+      (matrix-print direction-matrix)
       )
 
     (message
