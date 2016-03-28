@@ -616,8 +616,9 @@
 ;; main
 (defun main()
 
-  (let
+  (let*
       (
+
        (gnu-emacs-wikipedia-page
         (load-document
         "Internet/https:-SLASH-SLASH-en.wikipedia.org-SLASH-wiki-SLASH-GNU_Emacs"))
