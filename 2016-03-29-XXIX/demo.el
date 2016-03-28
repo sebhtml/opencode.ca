@@ -543,7 +543,22 @@
   (princ (format "Input: %d" (length alignments)))
   (terpri)
 
-  alignments
+  (if (equal alignments nil)
+      alignments
+
+    (let*
+        (
+         (first-item (car alignments))
+         (other-items (cdr alignments))
+         (other-filtered-items (filter-alignments-with-minimum-match-count other-items minimum-match-count))
+         (match-count (alignment-match-count first-item))
+         (keep-first (>= match-count minimum-match-count))
+         )
+      (if keep-first
+          (cons first-item other-filtered-items)
+        other-filtered-items)
+    )
+    )
   )
 
 
@@ -594,8 +609,9 @@
 
       (let*
           (
+           (minimum-match-count 3)
            (raw-alignments (get-alignments document-a document-b dynamic-programming-matrix direction-matrix))
-           (alignments (filter-alignments-with-minimum-match-count raw-alignments 2))
+           (alignments (filter-alignments-with-minimum-match-count raw-alignments minimum-match-count))
            )
         (princ (format "Alignments: %d" (length alignments)))
         (terpri)
