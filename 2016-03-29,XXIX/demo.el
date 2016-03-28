@@ -54,6 +54,10 @@
 (defun alignment-print (this)
   ;)
 
+  (princ (format "Alignment"))
+  (terpri)
+
+  (if (> (length (alignment-indices this)) 0)
 ;(defun foo (this)
   (let*
       (
@@ -70,6 +74,8 @@
                    row column dynamic-programming-score match-count))
     (terpri)
     )
+  nil
+  )
   )
 
 (defun get-match-count (indices)
@@ -90,12 +96,47 @@
     match-count
     ))
 
+(defun alignment-generate-indices (dynamic-programming-matrix direction-matrix row column)
+  (let*
+      (
+       (direction (matrix-get-cell direction-matrix row column))
+       )
+    ; LEFT UP
+    (if (= direction DIRECTION-LEFT-UP)
+        (let*
+            (
+             (previous-row (- row 1))
+             (previous-column (- column 1))
+             (previous-indices (alignment-generate-indices dynamic-programming-matrix direction-matrix previous-row previous-column))
+             (pair (make-pair :index-a row :index-b column :type TYPE-MATCH))
+             )
+          (list pair)
+          )
+
+      ; LEFT
+      (if (= direction DIRECTION-LEFT)
+          nil
+                                        ; UP
+        (if (= direction DIRECTION-UP)
+            nil
+
+                                        ; direction: NONE
+          (if (= direction DIRECTION-NONE)
+              nil
+            nil)))
+      )
+  ))
+
+
+
 (defun get-alignment (document-a document-b dynamic-programming-score dynamic-programming-matrix direction-matrix row column)
   (let*
       (
        (last-pair (make-pair :index-a row :index-b column :type TYPE-MATCH))
-       (indices (vector last-pair))
-       (match-count (get-match-count indices))
+       ;(indices (alignment-generate-indices dynamic-programming-matrix direction-matrix row column))
+       (indices (vector))
+    ;(match-count (get-match-count indices))
+    (match-count 0)
        )
   (make-alignment
    :document-a document-a
@@ -105,8 +146,6 @@
    :indices indices
    )
   ))
-
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; class document
@@ -568,9 +607,9 @@
        )
 
     ;(align-documents hello hello)
-    ;(align-documents my-text my-text)
+    (align-documents my-text my-text)
      ;(align-documents gnu-emacs-wikipedia-page my-text)
-     (align-documents spacemacs-github-page my-text)
+     ;(align-documents spacemacs-github-page my-text)
      ;(align-documents spacemacs-twitter-page my-text)
   ))
 
