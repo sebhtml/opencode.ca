@@ -105,7 +105,7 @@
 ;;(defun foo (this)
   (let*
       (
-       (print-indices t)
+       (print-indices true)
        (indices (alignment-indices this))
        (the-length (length indices))
        (last-index (- the-length 1))
@@ -291,11 +291,12 @@
     match-count
     ))
 
-(defun alignment-generate-indices (dynamic-programming-matrix direction-matrix row column)
+(defun alignment-generate-indices (similarity-matrix dynamic-programming-matrix direction-matrix row column)
   (let*
       (
+       (similarity-score (matrix-get-cell similarity-matrix row column))
        (direction (matrix-get-cell direction-matrix row column))
-       (pair (make-pair :index-a row :index-b column :type TYPE-MATCH))
+       (pair (make-pair :index-a row :index-b column :type (if (> similarity-score 0) TYPE-MATCH TYPE-MISMATCH)))
        )
     ;; LEFT UP
     (if (= direction DIRECTION-LEFT-UP)
