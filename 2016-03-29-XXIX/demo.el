@@ -86,11 +86,11 @@
   indices)
 
 (defun format-string (word)
-  (format " %10s " word)
+  (format " %16s " word)
   )
 
 (defun format-integer (word)
-  (format " %10d " word)
+  (format " %16d " word)
   )
 
 (defun alignment-print (this)
@@ -915,9 +915,9 @@
        )
 
     ;;(align-documents hello hello)
-    (align-documents my-text my-text)
+    ;;(align-documents my-text my-text)
      ;;(align-documents gnu-emacs-wikipedia-page my-text)
-     ;;(align-documents spacemacs-github-page my-text)
+     (align-documents spacemacs-github-page my-text)
      ;;(align-documents spacemacs-twitter-page my-text)
   ))
 
