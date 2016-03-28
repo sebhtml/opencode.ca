@@ -607,11 +607,8 @@
   (let*
       (
        (content (get-string-from-file file-path))
-       ;(content (replace-regexp-in-string "\." " " content))
-       ;(content (replace-regexp-in-string "," " " content))
-       ;(content (replace-regexp-in-string "\?" " " content))
-       ;(content (replace-regexp-in-string "!" " " content))
-       (sequence-list (split-string content))
+       (content-3 (replace-regexp-in-string "," " " content))
+       (sequence-list (split-string content-3))
        (sequence (vconcat (vector) sequence-list))
        )
     (make-document
