@@ -3,9 +3,9 @@
 (setq max-specpdl-size 999999)
 (setq max-lisp-eval-depth 999999)
 
-(setq COST-GAP -3)
-(setq COST-MATCH +1)
-(setq COST-MISMATCH -1)
+(setq SCORE-GAP -3)
+(setq SCORE-MATCH +1)
+(setq SCORE-MISMATCH -1)
 
 (setq DIRECTION-NONE -1)
 (setq DIRECTION-LEFT 0)
@@ -112,7 +112,7 @@
     )
   )
 
-(defun matrix-print (matrix print-cell-value)
+(defun matrix-print (matrix)
 
   (princ (format "Matrix rows: %d columns: %d"
            (matrix-row-count similarity-matrix)
@@ -138,7 +138,7 @@
              (value (matrix-get-cell matrix row column))
              ;(value 0)
              )
-          (funcall print-cell-value value)
+          (print-value value)
           )
 
         (setq column (+ column 1))
@@ -208,7 +208,7 @@
                (word-b (aref sequence-b column))
                (match (if
                           (equal word-a word-b)
-                          1 0
+                          SCORE-MATCH SCORE-MISMATCH
                           )
                           )
                ;(match 1)
@@ -343,17 +343,17 @@
 
       (princ "Similarity matrix")
       (terpri)
-      (matrix-print similarity-matrix 'print-similarity-value)
+      (matrix-print similarity-matrix)
 
       (run-dynamic-programming-code document-a document-b similarity-matrix dynamic-programming-matrix direction-matrix)
 
       (princ "Dynamic programming matrix")
       (terpri)
-      (matrix-print dynamic-programming-matrix 'print-value)
+      (matrix-print dynamic-programming-matrix)
 
       (princ "Direction matrix")
       (terpri)
-      (matrix-print direction-matrix 'print-value)
+      (matrix-print direction-matrix)
       )
 
     (princ
