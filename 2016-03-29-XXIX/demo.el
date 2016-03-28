@@ -501,7 +501,7 @@
   (terpri)
   )
 
-(defun get-alignments (document-a document-b dynamic-programming-matrix direction-matrix)
+(defun get-alignments (document-a document-b similarity-matrix dynamic-programming-matrix direction-matrix)
   (let*
       (
        (row 0)
@@ -517,9 +517,10 @@
         (while (< column column-count)
           (let*
               (
+               (similarity-score (matrix-get-cell similarity-matrix row column))
                (dynamic-programming-score (matrix-get-cell dynamic-programming-matrix row column))
                )
-            (if (> dynamic-programming-score 0)
+            (if (and (> dynamic-programming-score 0) (> similarity-score 0))
                 (progn
                   (let (
                         (my-alignment (get-alignment document-a document-b dynamic-programming-score dynamic-programming-matrix direction-matrix row column))
@@ -610,7 +611,7 @@
       (let*
           (
            (minimum-match-count 3)
-           (raw-alignments (get-alignments document-a document-b dynamic-programming-matrix direction-matrix))
+           (raw-alignments (get-alignments document-a document-b similarity-matrix dynamic-programming-matrix direction-matrix))
            (alignments (filter-alignments-with-minimum-match-count raw-alignments minimum-match-count))
            )
         (princ (format "Alignments: %d" (length alignments)))
