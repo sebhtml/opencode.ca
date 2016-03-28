@@ -1,8 +1,10 @@
 (require 'cl)
 
+; This is required in order for Emacs Lisp to not crash.
 (setq max-specpdl-size 999999)
 (setq max-lisp-eval-depth 999999)
 
+; The gap scoring model is simple: there is no opening cost, and the gap extension cost is SCORE-GAP
 (setq SCORE-GAP -3)
 (setq SCORE-MATCH +1)
 (setq SCORE-MISMATCH -1)
@@ -273,8 +275,30 @@
                         (setq max-dynamic-programming-score dynamic-programming-score)
                       nil)
                     )
-                                        ; Check gap with row
-                nil
+                                        ; Check gap score with row
+                (if (>= previous-row 0)
+                    (let*
+                        (
+                         (previous-dynamic-programming-score (matrix-get-cell dynamic-programming-matrix previous-row column))
+                         (dynamic-programming-score (+ previous-dynamic-programming-score SCORE-GAP))
+                         )
+                      (if (> dynamic-programming-score max-dynamic-programming-score)
+                          (setq max-dynamic-programming-score dynamic-programming-score)
+                        nil)
+                      )
+                                        ; check gap score with column
+                  (if (>= previous-column 0)
+                      (let*
+                          (
+                           (previous-dynamic-programming-score (matrix-get-cell dynamic-programming-matrix row previous-column))
+                           (dynamic-programming-score (+ previous-dynamic-programming-score SCORE-GAP))
+                           )
+                        (if (> dynamic-programming-score max-dynamic-programming-score)
+                            (setq max-dynamic-programming-score dynamic-programming-score)
+                          nil))
+                    nil
+                    )
+                  )
                 )
               (matrix-set-cell dynamic-programming-matrix row column max-dynamic-programming-score)
               )
