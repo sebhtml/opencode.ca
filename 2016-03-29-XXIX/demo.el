@@ -539,6 +539,74 @@
     )
   )
 
+(defun checkhash (key my-hash)
+  (if (equal (gethash key my-hash) nil)
+      nil
+    t
+    ))
+
+(defun filter-redundant-alignments (alignments)
+  ;alignments
+  ;)
+
+;(defun filter-redundant-alignments-2 (alignments)
+  (let
+
+      ;; build a hash for every alignment
+      (
+       (my-hash (make-hash-table :test 'equal))
+       )
+    (mapcar (lambda (alignment)
+              (let*
+                  (
+                   (indices (alignment-indices alignment))
+                   (first-pair (aref indices 0))
+                   (index-a (pair-index-a first-pair))
+                   (index-b (pair-index-b first-pair))
+                   (key (cons index-a index-b))
+                   (value (length indices))
+                   )
+
+                ;; key is already used, check if this new value is better
+                (if (checkhash key my-hash)
+                    (if (> value (gethash key my-hash))
+                        (puthash key value my-hash)
+                      )
+                    (puthash key value my-hash)
+                    )
+                )
+              )
+            alignments
+            )
+
+    (defun filter-redundant-alignments-internal (alignments)
+      (if (equal alignments nil)
+          alignments
+        (let*
+            (
+             (first (car alignments))
+             (rest (cdr alignments))
+             (filtered-rest (filter-redundant-alignments-internal rest))
+             (indices (alignment-indices first))
+             (first-pair (aref indices 0))
+             (index-a (pair-index-a first-pair))
+             (index-b (pair-index-b first-pair))
+             (key (cons index-a index-b))
+             (value (length indices))
+             (best-value (gethash key my-hash))
+             (keep-first (= value best-value))
+             )
+          (if keep-first
+              (cons first filtered-rest)
+            filtered-rest)
+          )
+        )
+      )
+
+    (filter-redundant-alignments-internal alignments)
+    )
+  )
+
 (defun filter-alignments-with-minimum-match-count (alignments minimum-match-count)
   ;;)
   (princ (format "Input: %d" (length alignments)))
@@ -612,7 +680,8 @@
           (
            (minimum-match-count 3)
            (raw-alignments (get-alignments document-a document-b similarity-matrix dynamic-programming-matrix direction-matrix))
-           (alignments (filter-alignments-with-minimum-match-count raw-alignments minimum-match-count))
+           (alignments-2 (filter-alignments-with-minimum-match-count raw-alignments minimum-match-count))
+           (alignments (filter-redundant-alignments alignments-2))
            )
         (princ (format "Alignments: %d" (length alignments)))
         (terpri)
