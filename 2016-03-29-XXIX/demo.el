@@ -18,6 +18,8 @@
 (setq max-specpdl-size 999999)
 (setq max-lisp-eval-depth 999999)
 
+(setq OPTION-PRINT-MATRIX nil)
+
 ;; The gap scoring model is simple: there is no opening cost, and the gap extension cost is SCORE-DELETION or SCORE-INSERTION
 (setq SCORE-DELETION -3)
 (setq SCORE-INSERTION -3)
@@ -88,7 +90,9 @@
                    row column dynamic-programming-score match-count the-length))
     (terpri)
     (princ "Indices ")
-    (princ indices)
+    ;;(princ indices)
+
+    (terpri)
     (terpri)
     )
   nil
@@ -127,8 +131,8 @@
              (previous-column (- column 1))
              (previous-indices (alignment-generate-indices dynamic-programming-matrix direction-matrix previous-row previous-column))
              )
-          (princ pair)
-          (terpri)
+          ;;(princ pair)
+          ;;(terpri)
           (cons pair previous-indices)
           )
 
@@ -149,8 +153,8 @@
 
 
 (defun get-alignment (document-a document-b dynamic-programming-score dynamic-programming-matrix direction-matrix row column)
-  (princ "get-alignment")
-  (terpri)
+  ;(princ "get-alignment")
+  ;(terpri)
   (let*
       (
        (last-pair (make-pair :index-a row :index-b column :type TYPE-MATCH))
@@ -609,8 +613,8 @@
 
 (defun filter-alignments-with-minimum-match-count (alignments minimum-match-count)
   ;;)
-  (princ (format "Input: %d" (length alignments)))
-  (terpri)
+  ;;(princ (format "Input: %d" (length alignments)))
+  ;;(terpri)
 
   (if (equal alignments nil)
       alignments
@@ -635,8 +639,9 @@
 
   (princ (format "------------------------------------------------------------------------------"))
   (terpri)
-    (princ "Alignment"
+    (princ "Alignments"
            )
+    (terpri)
     (terpri)
 
     (princ "Document A")
@@ -662,19 +667,24 @@
 
       (populate-similarity-matrix document-a document-b similarity-matrix)
 
-      (princ "Similarity matrix")
-      (terpri)
-      (matrix-print similarity-matrix)
-
       (run-dynamic-programming-code document-a document-b similarity-matrix dynamic-programming-matrix direction-matrix)
 
-      (princ "Dynamic programming matrix")
-      (terpri)
-      (matrix-print dynamic-programming-matrix)
+      (if OPTION-PRINT-MATRIX
+          (progn
+            (princ "Similarity matrix")
+            (terpri)
+            (matrix-print similarity-matrix)
 
-      (princ "Direction matrix")
-      (terpri)
-      (matrix-print direction-matrix)
+
+            (princ "Dynamic programming matrix")
+            (terpri)
+            (matrix-print dynamic-programming-matrix)
+
+            (princ "Direction matrix")
+            (terpri)
+            (matrix-print direction-matrix)
+            )
+        )
 
       (let*
           (
@@ -685,6 +695,8 @@
            )
         (princ (format "Alignments: %d" (length alignments)))
         (terpri)
+        (terpri)
+
         (mapcar (lambda (alignment)
                   (alignment-print alignment)
                   )
@@ -693,7 +705,7 @@
       )
 
     (princ
-     "End of alignment")
+     "End of alignments")
     (terpri)
 
        )
