@@ -4,8 +4,9 @@
 (setq max-specpdl-size 999999)
 (setq max-lisp-eval-depth 999999)
 
-; The gap scoring model is simple: there is no opening cost, and the gap extension cost is SCORE-GAP
-(setq SCORE-GAP -3)
+; The gap scoring model is simple: there is no opening cost, and the gap extension cost is SCORE-DELETION or SCORE-INSERTION
+(setq SCORE-DELETION -3)
+(setq SCORE-INSERTION -3)
 (setq SCORE-MATCH +1)
 (setq SCORE-MISMATCH -1)
 
@@ -23,6 +24,42 @@
   ;(if (> value 0)
       (princ (format "%4d" value)))
     ;(princ (format "%4s" "."))))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; class alignment
+
+(cl-defstruct alignment
+  document-a
+  document-b
+  dynamic-programming-score
+  indices)
+
+(defun alignment-print (this)
+  (let*
+      (
+       (indices (alignment-indices this))
+       (the-length (length indices))
+       (last-index (- the-length 1))
+       (last-pair (aref indices last-index))
+       (row (car last-pair))
+       (column (cdr last-pair))
+       (dynamic-programming-score (alignment-dynamic-programming-score this))
+       )
+    (princ (format "row %d column %d score %d" row column dynamic-programming-score))
+    (terpri)
+    )
+  )
+
+(defun get-alignment (document-a document-b dynamic-programming-score dynamic-programming-matrix direction-matrix row column)
+  (make-alignment
+   :document-a document-a
+   :document-b document-b
+   :dynamic-programming-score dynamic-programming-score
+   :indices (vector (cons row column))
+   )
+  )
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -285,8 +322,12 @@
                 (if (>= previous-row 0)
                     (let*
                         (
+                                        ;    4 5
+                                        ; 3  x
+                                        ; 4  x
+
                          (previous-dynamic-programming-score (matrix-get-cell dynamic-programming-matrix previous-row column))
-                         (dynamic-programming-score (+ previous-dynamic-programming-score SCORE-GAP))
+                         (dynamic-programming-score (+ previous-dynamic-programming-score SCORE-DELETION))
                          )
                       (if (> dynamic-programming-score max-dynamic-programming-score)
                           (progn
@@ -298,8 +339,12 @@
                   (if (>= previous-column 0)
                       (let*
                           (
+                                        ;    5 6
+                                        ; 5
+                                        ; 6  x x
+
                            (previous-dynamic-programming-score (matrix-get-cell dynamic-programming-matrix row previous-column))
-                           (dynamic-programming-score (+ previous-dynamic-programming-score SCORE-GAP))
+                           (dynamic-programming-score (+ previous-dynamic-programming-score SCORE-INSERTION))
                            )
                         (if (> dynamic-programming-score max-dynamic-programming-score)
                             (progn
@@ -350,8 +395,43 @@
   (terpri)
   )
 
-(defun get-alignments (dynamic-programming-matrix direction-matrix)
-  (list 1 2 3 4 5))
+(defun get-alignments (document-a document-b dynamic-programming-matrix direction-matrix)
+  (let*
+      (
+       (row 0)
+       (row-count (matrix-row-count dynamic-programming-matrix))
+       (column-count (matrix-column-count dynamic-programming-matrix))
+       (alignments (list))
+       )
+    (while (< row row-count)
+      (let*
+          (
+           (column 0)
+           )
+        (while (< column column-count)
+          (let*
+              (
+               (dynamic-programming-score (matrix-get-cell dynamic-programming-matrix row column))
+               )
+            (if (> dynamic-programming-score 0)
+                (progn
+                  (let (
+                        (my-alignment (get-alignment document-a document-b dynamic-programming-score dynamic-programming-matrix direction-matrix row column))
+                        )
+                    (alignment-print my-alignment)
+                    (setq alignments (cons my-alignment alignments))
+                    )
+                  )
+              nil)
+            )
+          (setq column (+ column 1))
+          )
+        )
+      (setq row (+ row 1)))
+
+    alignments
+    )
+  )
 
 (defun align-documents (document-a document-b)
 
@@ -400,7 +480,7 @@
 
       (let*
           (
-           (alignments (get-alignments dynamic-programming-matrix direction-matrix))
+           (alignments (get-alignments document-a document-b dynamic-programming-matrix direction-matrix))
            )
         (princ (format "Alignments: %d" (length alignments)))
         (terpri)
@@ -444,8 +524,8 @@
 
     ;(align-documents hello hello)
     ;(align-documents my-text my-text)
-     (align-documents gnu-emacs-wikipedia-page my-text)
-     ;(align-documents spacemacs-github-page my-text)
+     ;(align-documents gnu-emacs-wikipedia-page my-text)
+     (align-documents spacemacs-github-page my-text)
      ;(align-documents spacemacs-twitter-page my-text)
   ))
 
