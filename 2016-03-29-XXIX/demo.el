@@ -105,7 +105,7 @@
 ;;(defun foo (this)
   (let*
       (
-       (print-indices true)
+       (print-indices t)
        (indices (alignment-indices this))
        (the-length (length indices))
        (last-index (- the-length 1))
@@ -304,7 +304,7 @@
             (
              (previous-row (- row 1))
              (previous-column (- column 1))
-             (previous-indices (alignment-generate-indices dynamic-programming-matrix direction-matrix previous-row previous-column))
+             (previous-indices (alignment-generate-indices similarity-matrix dynamic-programming-matrix direction-matrix previous-row previous-column))
              )
           ;;(princ pair)
           ;;(terpri)
@@ -317,7 +317,7 @@
               (
                (previous-row row)
                (previous-column (- column 1))
-               (previous-indices (alignment-generate-indices dynamic-programming-matrix direction-matrix previous-row previous-column))
+               (previous-indices (alignment-generate-indices similarity-matrix dynamic-programming-matrix direction-matrix previous-row previous-column))
                )
             (cons pair previous-indices)
             )
@@ -327,7 +327,7 @@
                 (
                  (previous-row (- row 1))
                  (previous-column column)
-                 (previous-indices (alignment-generate-indices dynamic-programming-matrix direction-matrix previous-row previous-column))
+                 (previous-indices (alignment-generate-indices similarity-matrix dynamic-programming-matrix direction-matrix previous-row previous-column))
                  )
               (cons pair previous-indices)
               )
@@ -341,13 +341,13 @@
 
 
 
-(defun get-alignment (document-a document-b dynamic-programming-score dynamic-programming-matrix direction-matrix row column)
+(defun get-alignment (document-a document-b similarity-matrix dynamic-programming-score dynamic-programming-matrix direction-matrix row column)
   ;(princ "get-alignment")
   ;(terpri)
   (let*
       (
        (last-pair (make-pair :index-a row :index-b column :type TYPE-MATCH))
-       (my-list (reverse (alignment-generate-indices dynamic-programming-matrix direction-matrix row column)))
+       (my-list (reverse (alignment-generate-indices similarity-matrix dynamic-programming-matrix direction-matrix row column)))
        (indices (vconcat (vector) my-list))
     (match-count (get-match-count indices))
     ;;(match-count 0)
@@ -742,7 +742,7 @@
             (if (and (> dynamic-programming-score 0) (> similarity-score 0))
                 (progn
                   (let (
-                        (my-alignment (get-alignment document-a document-b dynamic-programming-score dynamic-programming-matrix direction-matrix row column))
+                        (my-alignment (get-alignment document-a document-b similarity-matrix dynamic-programming-score dynamic-programming-matrix direction-matrix row column))
                         )
                     (setq alignments (cons my-alignment alignments))
                     )
