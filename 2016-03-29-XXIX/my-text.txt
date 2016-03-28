@@ -23,6 +23,6 @@ Sylvain Benner decided to bring peace to the galaxy by starting the Spacemacs pr
 Spacemacs is a community-driven Emacs distribution.
 Emacs is a flagship product of the free software movement.
 
-The best editor is neither Emacs nor Vim, it's Emacs *and* Vim!
+The best editor today is neither Emacs nor Vim, it's Emacs *and* Vim!
 
 Spacemacs is very neat. The Evil Vim flagship and its fleet is coming over the Holy planet Emacs. It is coming in Peace.

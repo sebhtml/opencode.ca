@@ -21,9 +21,9 @@
 (setq OPTION-PRINT-MATRIX nil)
 
 ;; The gap scoring model is simple: there is no opening cost, and the gap extension cost is SCORE-DELETION or SCORE-INSERTION
-(setq SCORE-DELETION -3)
-(setq SCORE-INSERTION -3)
-(setq SCORE-MATCH +1)
+(setq SCORE-DELETION -1)
+(setq SCORE-INSERTION -1)
+(setq SCORE-MATCH +2)
 (setq SCORE-MISMATCH -1)
 
 (setq TYPE-MATCH 0)
@@ -40,11 +40,6 @@
   (if (> value 0)
       (princ "#")
     (princ ".")))
-
-(defun print-value (value)
-  ;;(if (> value 0)
-      (princ (format "%4d" value)))
-    ;;(princ (format "%4s" "."))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -93,6 +88,13 @@
   (format " %16d " word)
   )
 
+(defun print-value (value)
+  ;;(if (> value 0)
+  (princ (format " %10d" value)))
+;;(princ (format "%4s" "."))))
+
+
+
 (defun alignment-print (this)
   ;;)
 
@@ -103,7 +105,7 @@
 ;;(defun foo (this)
   (let*
       (
-       (print-indices nil)
+       (print-indices t)
        (indices (alignment-indices this))
        (the-length (length indices))
        (last-index (- the-length 1))
@@ -310,10 +312,24 @@
 
       ;; LEFT
       (if (= direction DIRECTION-LEFT)
-          nil
+          (let*
+              (
+               (previous-row row)
+               (previous-column (- column 1))
+               (previous-indices (alignment-generate-indices dynamic-programming-matrix direction-matrix previous-row previous-column))
+               )
+            (cons pair previous-indices)
+            )
                                         ;; UP
         (if (= direction DIRECTION-UP)
-            nil
+            (let*
+                (
+                 (previous-row (- row 1))
+                 (previous-column column)
+                 (previous-indices (alignment-generate-indices dynamic-programming-matrix direction-matrix previous-row previous-column))
+                 )
+              (cons pair previous-indices)
+              )
 
                                         ;; direction: NONE
           (if (= direction DIRECTION-NONE)
@@ -433,7 +449,7 @@
     )
   )
 
-(defun matrix-print (matrix)
+(defun matrix-print (document-a document-b matrix)
 
   (princ (format "Matrix rows: %d columns: %d"
            (matrix-row-count similarity-matrix)
@@ -442,6 +458,17 @@
   (terpri)
 
   ;;(matrix-print-rows matrix 0)
+
+  (princ (format-string ""))
+  (let
+      (
+       (i 0)
+       )
+    (while (< i (length (document-sequence document-a)))
+      (princ (format-string (aref (document-sequence document-b) i)))
+      (setq i (+ i 1))
+      ))
+  (terpri)
 
   (let*
       (
@@ -452,6 +479,7 @@
        )
 
     (while (< row row-count)
+      (princ (format-string (aref (document-sequence document-a) row)))
       ;;(print (format "DEBUG row %d" row))
       (while (< column column-count)
         (let*
@@ -459,7 +487,7 @@
              (value (matrix-get-cell matrix row column))
              ;;(value 0)
              )
-          (print-value value)
+          (princ (format-integer value))
           )
 
         (setq column (+ column 1))
@@ -569,13 +597,16 @@
        )
     (let*
         (
-         (row 0))
+         (row 0)
+         )
       (while (< row row-count)
         (let*
             (
              (column 0)
              )
           (while (< column column-count)
+            ;;(princ (format "DP row %d column %d" row column))
+            ;;(terpri)
             (let*
                 (
                  (current-similarity-score (matrix-get-cell similarity-matrix row column))
@@ -593,6 +624,8 @@
                       ((previous-dynamic-programming-score (matrix-get-cell dynamic-programming-matrix previous-row previous-column))
                        (dynamic-programming-score (+ previous-dynamic-programming-score current-similarity-score))
                        )
+                    ;;(princ (format "  DP row %d column %d DP-score %d" previous-row previous-column  previous-dynamic-programming-score))
+                    ;;(terpri)
                     (if (> dynamic-programming-score max-dynamic-programming-score)
                         (progn
                           (setq max-dynamic-programming-score dynamic-programming-score)
@@ -600,9 +633,11 @@
                           )
                       nil)
                     )
+                nil
+                )
                                         ;; Check gap score with row
-                (if (>= previous-row 0)
-                    (let*
+              (if (>= previous-row 0)
+                  (let*
                         (
                                         ;;    4 5
                                         ;; 3  x
@@ -617,8 +652,10 @@
                             (setq max-direction DIRECTION-UP))
                         nil)
                       )
+                nil
+                  )
                                         ;; check gap score with column
-                  (if (>= previous-column 0)
+              (if (>= previous-column 0)
                       (let*
                           (
                                         ;;    5 6
@@ -635,8 +672,7 @@
                           nil))
                     nil
                     )
-                  )
-                )
+
               (matrix-set-cell dynamic-programming-matrix row column max-dynamic-programming-score)
               (matrix-set-cell direction-matrix row column max-direction)
               )
@@ -851,16 +887,16 @@
           (progn
             (princ "Similarity matrix")
             (terpri)
-            (matrix-print similarity-matrix)
+            (matrix-print document-a document-b similarity-matrix)
 
 
             (princ "Dynamic programming matrix")
             (terpri)
-            (matrix-print dynamic-programming-matrix)
+            (matrix-print document-a document-b dynamic-programming-matrix)
 
             (princ "Direction matrix")
             (terpri)
-            (matrix-print direction-matrix)
+            (matrix-print document-a document-b direction-matrix)
             )
         )
 
@@ -912,12 +948,17 @@
          "my-text.txt"))
 
        (hello (load-document "hello-world.txt"))
+
+       (ref (load-document "ref-text.txt"))
+       (text-a (load-document "text-a.txt"))
        )
 
+    (align-documents ref text-a)
+    ;;(align-documents ref my-text)
     ;;(align-documents hello hello)
     ;;(align-documents my-text my-text)
      ;;(align-documents gnu-emacs-wikipedia-page my-text)
-     (align-documents spacemacs-github-page my-text)
+     ;;(align-documents spacemacs-github-page my-text)
      ;;(align-documents spacemacs-twitter-page my-text)
   ))
 
