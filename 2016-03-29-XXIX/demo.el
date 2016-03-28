@@ -606,14 +606,18 @@
 
   (let*
       (
-       (content (get-string-from-file file-path))
-       (content-3 (replace-regexp-in-string "," " " content))
-       (sequence-list (split-string content-3))
+       (content-1 (get-string-from-file file-path))
+       (content-2 (replace-regexp-in-string "!" " ! " content-1))
+       (content-3 (replace-regexp-in-string "--" " -- " content-2))
+       (content-4 (replace-regexp-in-string "," " , " content-3))
+       (content-5 (replace-regexp-in-string "\\." " . " content-4))
+       (content-6 (replace-regexp-in-string "?" " ? " content-5))
+       (sequence-list (split-string content-6))
        (sequence (vconcat (vector) sequence-list))
        )
     (make-document
      :file-path file-path
-     :content content
+     :content content-1
      :sequence sequence
      )
        ))
