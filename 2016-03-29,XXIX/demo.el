@@ -142,8 +142,8 @@
        (last-pair (make-pair :index-a row :index-b column :type TYPE-MATCH))
        (my-list (reverse (alignment-generate-indices dynamic-programming-matrix direction-matrix row column)))
        (indices (vconcat (vector) my-list))
-    ;(match-count (get-match-count indices))
-    (match-count 0)
+    (match-count (get-match-count indices))
+    ;(match-count 0)
        )
   (make-alignment
    :document-a document-a
@@ -524,6 +524,15 @@
     )
   )
 
+(defun filter-alignments-with-minimum-match-count (alignments minimum-match-count)
+  ;)
+  (princ (format "Input: %d" (length alignments)))
+  (terpri)
+
+  alignments
+  )
+
+
 (defun align-documents (document-a document-b)
 
   (princ (format "------------------------------------------------------------------------------"))
@@ -571,7 +580,8 @@
 
       (let*
           (
-           (alignments (get-alignments document-a document-b dynamic-programming-matrix direction-matrix))
+           (raw-alignments (get-alignments document-a document-b dynamic-programming-matrix direction-matrix))
+           (alignments (filter-alignments-with-minimum-match-count raw-alignments 2))
            )
         (princ (format "Alignments: %d" (length alignments)))
         (terpri)
