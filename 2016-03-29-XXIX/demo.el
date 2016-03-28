@@ -603,9 +603,14 @@
 
 (defun load-document (file-path)
 
+
   (let*
       (
        (content (get-string-from-file file-path))
+       ;(content (replace-regexp-in-string "\." " " content))
+       ;(content (replace-regexp-in-string "," " " content))
+       ;(content (replace-regexp-in-string "\?" " " content))
+       ;(content (replace-regexp-in-string "!" " " content))
        (sequence-list (split-string content))
        (sequence (vconcat (vector) sequence-list))
        )
