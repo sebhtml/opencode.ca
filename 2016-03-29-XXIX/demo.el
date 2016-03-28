@@ -103,6 +103,7 @@
 ;;(defun foo (this)
   (let*
       (
+       (print-indices nil)
        (indices (alignment-indices this))
        (the-length (length indices))
        (last-index (- the-length 1))
@@ -123,7 +124,9 @@
     (terpri)
     ;;(princ indices)
 
+
     ;; Print indices of pairs
+    (if print-indices (progn
     (princ (format-string "Pair"))
     (let
         (
@@ -144,7 +147,10 @@
       (terpri)
       )
 
+    ) nil )
+
     ;; Print types
+    (if print-indices (progn
     (princ (format-string "Types"))
     (let
         (
@@ -162,9 +168,11 @@
         )
       (terpri)
       )
+    ) nil )
 
 
     ;; Print indices of words in document-a
+    (if print-indices (progn
     (princ (format-string "Index A"))
     (let
         (
@@ -183,10 +191,11 @@
         )
       (terpri)
       )
+    ) nil )
 
 
     ;; Print document-a
-    (princ (format-string "Word A"))
+    (princ (format-string "Sequence A"))
     (let
         (
          (i 0)
@@ -207,6 +216,53 @@
         )
       (terpri)
       )
+
+    ;; Word B
+
+    ;; Print indices of words in document-b
+    (if print-indices (progn
+    (princ (format-string "Index B"))
+    (let
+        (
+         (i 0)
+         )
+      (while (< i the-length)
+        (let*
+            (
+             (pair (aref indices i))
+             (index-b (pair-index-b pair))
+             )
+          (princ (format-integer index-b))
+          )
+        (setq i (+ i 1))
+        )
+      (terpri)
+      )
+    ) nil )
+
+    ;; Print document-b
+    (princ (format-string "Sequence B"))
+    (let
+        (
+         (i 0)
+         )
+      (while (< i the-length)
+        (let*
+            (
+             (pair (aref indices i))
+             (index-b (pair-index-b pair))
+             (word (aref sequence-b index-b))
+             (type (pair-type pair))
+             )
+          (if (= type TYPE-DELETION)
+              (princ (format-string ""))
+            (princ (format-string word)))
+          )
+        (setq i (+ i 1))
+        )
+      (terpri)
+      )
+
 
     ;; Print a new line
     (terpri)
