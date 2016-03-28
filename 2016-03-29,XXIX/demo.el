@@ -345,6 +345,14 @@
      )
        ))
 
+(defun print-alignment (alignment document-a document-b)
+  (princ "This is an alignment.")
+  (terpri)
+  )
+
+(defun get-alignments (dynamic-programming-matrix direction-matrix)
+  (list 1 2 3 4 5))
+
 (defun align-documents (document-a document-b)
 
   (princ (format "------------------------------------------------------------------------------"))
@@ -389,6 +397,18 @@
       (princ "Direction matrix")
       (terpri)
       (matrix-print direction-matrix)
+
+      (let*
+          (
+           (alignments (get-alignments dynamic-programming-matrix direction-matrix))
+           )
+        (princ (format "Alignments: %d" (length alignments)))
+        (terpri)
+        (mapcar (lambda (alignment)
+                  (print-alignment alignment document-a document-b)
+                  )
+                alignments)
+        )
       )
 
     (princ
