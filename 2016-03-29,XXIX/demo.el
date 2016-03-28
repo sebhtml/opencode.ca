@@ -3,18 +3,24 @@
 (setq max-specpdl-size 999999)
 (setq max-lisp-eval-depth 999999)
 
+(setq COST-GAP -3)
+(setq COST-MATCH +1)
+(setq COST-MISMATCH -1)
+
 (setq DIRECTION-NONE -1)
 (setq DIRECTION-LEFT 0)
 (setq DIRECTION-UP 1)
 (setq DIRECTION-LEFT-UP 2)
 
 (defun print-similarity-value (value)
-  (if (equal value 1)
+  (if (> value 0)
       (princ "#")
     (princ ".")))
 
 (defun print-value (value)
-  (princ (format " %d" value)))
+  ;(if (> value 0)
+      (princ (format "%4d" value)))
+    ;(princ (format "%4s" "."))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -232,9 +238,55 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; DP code
 
-(defun run-dynamic_programming-code
+(defun run-dynamic-programming-code
     (document-a document-b similarity-matrix dynamic-programming-matrix direction-matrix)
+
+  (let*
+      (
+       (row-count (matrix-row-count similarity-matrix))
+       (column-count (matrix-column-count similarity-matrix))
+       )
+    (let*
+        (
+         (row 0))
+      (while (< row row-count)
+        (let*
+            (
+             (column 0)
+             )
+          (while (< column column-count)
+            (let*
+                (
+                 (current-similarity-score (matrix-get-cell similarity-matrix row column))
+                 (max-dynamic-programming-score 0)
+                 (previous-row (- row 1))
+                 (previous-column (- column 1))
+                 )
+              ; check diagonal
+                                        ; https://en.wikipedia.org/wiki/Smith%E2%80%93Waterman_algorithm
+              (if (and (>= previous-row 0) (>= previous-column 0) (> current-similarity-score 0))
+                  (let*
+                      ((previous-dynamic-programming-score (matrix-get-cell dynamic-programming-matrix previous-row previous-column))
+                       (dynamic-programming-score (+ previous-dynamic-programming-score current-similarity-score))
+                       )
+                    (if (> dynamic-programming-score max-dynamic-programming-score)
+                        (setq max-dynamic-programming-score dynamic-programming-score)
+                      nil)
+                    )
+                                        ; Check gap with row
+                nil
+                )
+              (matrix-set-cell dynamic-programming-matrix row column max-dynamic-programming-score)
+              )
+            (setq column (+ column 1))
+            )
+          )
+        (setq row (+ row 1))
+        )
+      )
     )
+  )
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; stuff
 
@@ -293,7 +345,7 @@
       (terpri)
       (matrix-print similarity-matrix 'print-similarity-value)
 
-      (run-dynamic_programming-code document-a document-b similarity-matrix dynamic-programming-matrix direction-matrix)
+      (run-dynamic-programming-code document-a document-b similarity-matrix dynamic-programming-matrix direction-matrix)
 
       (princ "Dynamic programming matrix")
       (terpri)
