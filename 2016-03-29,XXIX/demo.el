@@ -70,8 +70,11 @@
        (dynamic-programming-score (alignment-dynamic-programming-score this))
        (match-count (alignment-match-count this))
        )
-    (princ (format "row %d column %d score %d match-count %d"
-                   row column dynamic-programming-score match-count))
+    (princ (format "row %d column %d score %d match-count %d length %d"
+                   row column dynamic-programming-score match-count the-length))
+    (terpri)
+    (princ "Indices ")
+    (princ indices)
     (terpri)
     )
   nil
@@ -100,6 +103,7 @@
   (let*
       (
        (direction (matrix-get-cell direction-matrix row column))
+       (pair (make-pair :index-a row :index-b column :type TYPE-MATCH))
        )
     ; LEFT UP
     (if (= direction DIRECTION-LEFT-UP)
@@ -108,9 +112,10 @@
              (previous-row (- row 1))
              (previous-column (- column 1))
              (previous-indices (alignment-generate-indices dynamic-programming-matrix direction-matrix previous-row previous-column))
-             (pair (make-pair :index-a row :index-b column :type TYPE-MATCH))
              )
-          (list pair)
+          (princ pair)
+          (terpri)
+          (cons pair previous-indices)
           )
 
       ; LEFT
@@ -122,7 +127,7 @@
 
                                         ; direction: NONE
           (if (= direction DIRECTION-NONE)
-              nil
+              (list pair)
             nil)))
       )
   ))
@@ -130,11 +135,13 @@
 
 
 (defun get-alignment (document-a document-b dynamic-programming-score dynamic-programming-matrix direction-matrix row column)
+  (princ "get-alignment")
+  (terpri)
   (let*
       (
        (last-pair (make-pair :index-a row :index-b column :type TYPE-MATCH))
-       ;(indices (alignment-generate-indices dynamic-programming-matrix direction-matrix row column))
-       (indices (vector))
+       (my-list (reverse (alignment-generate-indices dynamic-programming-matrix direction-matrix row column)))
+       (indices (vconcat (vector) my-list))
     ;(match-count (get-match-count indices))
     (match-count 0)
        )
