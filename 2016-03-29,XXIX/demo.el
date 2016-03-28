@@ -10,6 +10,11 @@
 (setq SCORE-MATCH +1)
 (setq SCORE-MISMATCH -1)
 
+(setq TYPE-MATCH 0)
+(setq TYPE-MISMATCH 1)
+(setq TYPE-DELETION 2)
+(setq TYPE-INSERTION 3)
+
 (setq DIRECTION-NONE 0)
 (setq DIRECTION-LEFT 1)
 (setq DIRECTION-UP 2)
@@ -27,38 +32,79 @@
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; class alignment
+; class pair
+
+(cl-defstruct pair
+  index-a
+  index-b
+  type
+  )
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+             ; class alignment
 
 (cl-defstruct alignment
   document-a
   document-b
   dynamic-programming-score
+  match-count
   indices)
 
 (defun alignment-print (this)
+  ;)
+
+;(defun foo (this)
   (let*
       (
        (indices (alignment-indices this))
        (the-length (length indices))
        (last-index (- the-length 1))
        (last-pair (aref indices last-index))
-       (row (car last-pair))
-       (column (cdr last-pair))
+       (row (pair-index-a last-pair))
+       (column (pair-index-b last-pair))
        (dynamic-programming-score (alignment-dynamic-programming-score this))
+       (match-count (alignment-match-count this))
        )
-    (princ (format "row %d column %d score %d" row column dynamic-programming-score))
+    (princ (format "row %d column %d score %d match-count %d"
+                   row column dynamic-programming-score match-count))
     (terpri)
     )
   )
 
+(defun get-match-count (indices)
+  (let
+      (
+       (i 0)
+       (match-count 0)
+       (the-length (length indices))
+       )
+    (while (< i the-length)
+      (if
+          (= (pair-type (aref indices i)) TYPE-MATCH)
+          (setq match-count (+ match-count 1))
+        nil
+        )
+      (setq i (+ i  1))
+      )
+    match-count
+    ))
+
 (defun get-alignment (document-a document-b dynamic-programming-score dynamic-programming-matrix direction-matrix row column)
+  (let*
+      (
+       (last-pair (make-pair :index-a row :index-b column :type TYPE-MATCH))
+       (indices (vector last-pair))
+       (match-count (get-match-count indices))
+       )
   (make-alignment
    :document-a document-a
    :document-b document-b
    :dynamic-programming-score dynamic-programming-score
-   :indices (vector (cons row column))
+   :match-count match-count
+   :indices indices
    )
-  )
+  ))
 
 
 
@@ -418,7 +464,6 @@
                   (let (
                         (my-alignment (get-alignment document-a document-b dynamic-programming-score dynamic-programming-matrix direction-matrix row column))
                         )
-                    (alignment-print my-alignment)
                     (setq alignments (cons my-alignment alignments))
                     )
                   )
@@ -485,7 +530,7 @@
         (princ (format "Alignments: %d" (length alignments)))
         (terpri)
         (mapcar (lambda (alignment)
-                  (print-alignment alignment document-a document-b)
+                  (alignment-print alignment)
                   )
                 alignments)
         )
