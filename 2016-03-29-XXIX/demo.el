@@ -1,10 +1,24 @@
+;; This program is free software: you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;;
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 (require 'cl)
 
-; This is required in order for Emacs Lisp to not crash.
+;; This is required in order for Emacs Lisp to not crash.
 (setq max-specpdl-size 999999)
 (setq max-lisp-eval-depth 999999)
 
-; The gap scoring model is simple: there is no opening cost, and the gap extension cost is SCORE-DELETION or SCORE-INSERTION
+;; The gap scoring model is simple: there is no opening cost, and the gap extension cost is SCORE-DELETION or SCORE-INSERTION
 (setq SCORE-DELETION -3)
 (setq SCORE-INSERTION -3)
 (setq SCORE-MATCH +1)
@@ -26,13 +40,13 @@
     (princ ".")))
 
 (defun print-value (value)
-  ;(if (> value 0)
+  ;;(if (> value 0)
       (princ (format "%4d" value)))
-    ;(princ (format "%4s" "."))))
+    ;;(princ (format "%4s" "."))))
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; class pair
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; class pair
 
 (cl-defstruct pair
   index-a
@@ -41,8 +55,8 @@
   )
 
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-             ; class alignment
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+             ;; class alignment
 
 (cl-defstruct alignment
   document-a
@@ -52,13 +66,13 @@
   indices)
 
 (defun alignment-print (this)
-  ;)
+  ;;)
 
   (princ (format "Alignment"))
   (terpri)
 
   (if (> (length (alignment-indices this)) 0)
-;(defun foo (this)
+;;(defun foo (this)
   (let*
       (
        (indices (alignment-indices this))
@@ -105,7 +119,7 @@
        (direction (matrix-get-cell direction-matrix row column))
        (pair (make-pair :index-a row :index-b column :type TYPE-MATCH))
        )
-    ; LEFT UP
+    ;; LEFT UP
     (if (= direction DIRECTION-LEFT-UP)
         (let*
             (
@@ -118,14 +132,14 @@
           (cons pair previous-indices)
           )
 
-      ; LEFT
+      ;; LEFT
       (if (= direction DIRECTION-LEFT)
           nil
-                                        ; UP
+                                        ;; UP
         (if (= direction DIRECTION-UP)
             nil
 
-                                        ; direction: NONE
+                                        ;; direction: NONE
           (if (= direction DIRECTION-NONE)
               (list pair)
             nil)))
@@ -143,7 +157,7 @@
        (my-list (reverse (alignment-generate-indices dynamic-programming-matrix direction-matrix row column)))
        (indices (vconcat (vector) my-list))
     (match-count (get-match-count indices))
-    ;(match-count 0)
+    ;;(match-count 0)
        )
   (make-alignment
    :document-a document-a
@@ -154,8 +168,8 @@
    )
   ))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; class document
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; class document
 
 (cl-defstruct document
   file-path
@@ -174,14 +188,14 @@
   (terpri)
 
   (princ (format "    Words %d"
-   ;"    Characters: %d Words: %d"
-           ;(document-content-length document)
+   ;;"    Characters: %d Words: %d"
+           ;;(document-content-length document)
                  (document-sequence-length document)))
   (terpri)
   )
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; matrix
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; matrix
 
 (cl-defstruct matrix
   row-count
@@ -202,20 +216,20 @@
      :column-count column-count
      :data data)))
 
-;(defun matrix-row-count (matrix)
-  ;(length matrix))
+;;(defun matrix-row-count (matrix)
+  ;;(length matrix))
 
-;(defun matrix-column-count (matrix)
-  ;(length (aref matrix 0))
-  ;)
+;;(defun matrix-column-count (matrix)
+  ;;(length (aref matrix 0))
+  ;;)
 
 (defun matrix-set-cell (matrix row column value)
-  ;(print (format "matrix-set-cell %d %d %d" row column value))
-  ;(print (format "data length %d" (length (matrix-data matrix))))
+  ;;(print (format "matrix-set-cell %d %d %d" row column value))
+  ;;(print (format "data length %d" (length (matrix-data matrix))))
   (let*
       (
        (data (matrix-data matrix))
-       ;(row-vector (aref data row))
+       ;;(row-vector (aref data row))
        (column-count (matrix-column-count matrix) )
        (i (+ (* row column-count) column))
        )
@@ -251,7 +265,7 @@
            ))
   (terpri)
 
-  ;(matrix-print-rows matrix 0)
+  ;;(matrix-print-rows matrix 0)
 
   (let*
       (
@@ -262,12 +276,12 @@
        )
 
     (while (< row row-count)
-      ;(print (format "DEBUG row %d" row))
+      ;;(print (format "DEBUG row %d" row))
       (while (< column column-count)
         (let*
             (
              (value (matrix-get-cell matrix row column))
-             ;(value 0)
+             ;;(value 0)
              )
           (print-value value)
           )
@@ -281,8 +295,8 @@
     )
   )
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; similarity matrix
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; similarity matrix
 
 (defun populate-similarity-matrix-row-column (document-a document-b matrix row column)
   (let*
@@ -291,9 +305,9 @@
        (sequence-b (document-sequence document-b))
        (word-a (aref sequence-a row))
        (word-b (aref sequence-b column))
-       ;(match (if (= word-a word-b) 1 0))
+       ;;(match (if (= word-a word-b) 1 0))
        )
-    ;(matrix-set-cell matrix row column match)
+    ;;(matrix-set-cell matrix row column match)
     )
   )
 
@@ -324,7 +338,7 @@
        (row-count (matrix-row-count matrix))
        )
     (while (< row row-count)
-      ;(print (format "Row %d" row))
+      ;;(print (format "Row %d" row))
       (let*
           (
            (column 0)
@@ -342,13 +356,13 @@
                           SCORE-MATCH SCORE-MISMATCH
                           )
                           )
-               ;(match 1)
+               ;;(match 1)
                )
 
-            ;(print (format "word-a %s word-b %s match %d" word-a word-b match))
+            ;;(print (format "word-a %s word-b %s match %d" word-a word-b match))
             (matrix-set-cell matrix row column match)
               )
-          ;(print (format "Column %d" column))
+          ;;(print (format "Column %d" column))
           (setq column (+ column 1))
           )
         )
@@ -366,8 +380,8 @@
     )
   )
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; DP code
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; DP code
 
 (defun run-dynamic-programming-code
     (document-a document-b similarity-matrix dynamic-programming-matrix direction-matrix)
@@ -394,10 +408,10 @@
                  (previous-row (- row 1))
                  (previous-column (- column 1))
                  )
-              ; check diagonal
-                                        ; https://en.wikipedia.org/wiki/Smith%E2%80%93Waterman_algorithm
+              ;; check diagonal
+                                        ;; https://en.wikipedia.org/wiki/Smith%E2%80%93Waterman_algorithm
               (if (and (>= previous-row 0) (>= previous-column 0)
-                       ;(> current-similarity-score 0)
+                       ;;(> current-similarity-score 0)
                        )
                   (let*
                       ((previous-dynamic-programming-score (matrix-get-cell dynamic-programming-matrix previous-row previous-column))
@@ -410,13 +424,13 @@
                           )
                       nil)
                     )
-                                        ; Check gap score with row
+                                        ;; Check gap score with row
                 (if (>= previous-row 0)
                     (let*
                         (
-                                        ;    4 5
-                                        ; 3  x
-                                        ; 4  x
+                                        ;;    4 5
+                                        ;; 3  x
+                                        ;; 4  x
 
                          (previous-dynamic-programming-score (matrix-get-cell dynamic-programming-matrix previous-row column))
                          (dynamic-programming-score (+ previous-dynamic-programming-score SCORE-DELETION))
@@ -427,13 +441,13 @@
                             (setq max-direction DIRECTION-UP))
                         nil)
                       )
-                                        ; check gap score with column
+                                        ;; check gap score with column
                   (if (>= previous-column 0)
                       (let*
                           (
-                                        ;    5 6
-                                        ; 5
-                                        ; 6  x x
+                                        ;;    5 6
+                                        ;; 5
+                                        ;; 6  x x
 
                            (previous-dynamic-programming-score (matrix-get-cell dynamic-programming-matrix row previous-column))
                            (dynamic-programming-score (+ previous-dynamic-programming-score SCORE-INSERTION))
@@ -459,8 +473,8 @@
     )
   )
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; stuff
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; stuff
 
 (defun get-string-from-file (file-path)
   (with-temp-buffer
@@ -525,7 +539,7 @@
   )
 
 (defun filter-alignments-with-minimum-match-count (alignments minimum-match-count)
-  ;)
+  ;;)
   (princ (format "Input: %d" (length alignments)))
   (terpri)
 
@@ -550,7 +564,7 @@
     (document-print document-b)
     (terpri)
 
-                                        ; TODO...
+                                        ;; TODO...
 
     (let*
         (
@@ -559,7 +573,7 @@
          (similarity-matrix (create-matrix row-count column-count))
          (dynamic-programming-matrix (create-matrix row-count column-count))
          (direction-matrix (create-matrix row-count column-count))
-         ;(similarity-matrix (make-similarity-matrix document-a document-b))
+         ;;(similarity-matrix (make-similarity-matrix document-a document-b))
          )
 
       (populate-similarity-matrix document-a document-b similarity-matrix)
@@ -598,8 +612,8 @@
 
        )
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; main
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; main
 (defun main()
 
   (let
@@ -623,11 +637,11 @@
        (hello (load-document "hello-world.txt"))
        )
 
-    ;(align-documents hello hello)
+    ;;(align-documents hello hello)
     (align-documents my-text my-text)
-     ;(align-documents gnu-emacs-wikipedia-page my-text)
-     ;(align-documents spacemacs-github-page my-text)
-     ;(align-documents spacemacs-twitter-page my-text)
+     ;;(align-documents gnu-emacs-wikipedia-page my-text)
+     ;;(align-documents spacemacs-github-page my-text)
+     ;;(align-documents spacemacs-twitter-page my-text)
   ))
 
 
