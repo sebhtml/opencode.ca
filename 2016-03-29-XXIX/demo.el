@@ -56,6 +56,24 @@
   type
   )
 
+(defun pair-type-string (this)
+  (let
+      (
+       (type (pair-type this))
+       )
+    (if (= type TYPE-MATCH)
+        "Match"
+      (if (= type TYPE-MISMATCH)
+          "Mismatch"
+        (if (= type TYPE-INSERTION)
+            "Insertion"
+          (if (= type TYPE-DELETION)
+              "Deletion")
+          )
+
+))
+    ))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
              ;; class alignment
@@ -66,6 +84,14 @@
   dynamic-programming-score
   match-count
   indices)
+
+(defun format-string (word)
+  (format " %10s " word)
+  )
+
+(defun format-integer (word)
+  (format " %10d " word)
+  )
 
 (defun alignment-print (this)
   ;;)
@@ -85,14 +111,104 @@
        (column (pair-index-b last-pair))
        (dynamic-programming-score (alignment-dynamic-programming-score this))
        (match-count (alignment-match-count this))
+       (document-a (alignment-document-a this))
+       (document-b (alignment-document-b this))
+       (sequence-a (document-sequence document-a))
+       (sequence-b (document-sequence document-b))
        )
     (princ (format "row %d column %d score %d match-count %d length %d"
                    row column dynamic-programming-score match-count the-length))
     (terpri)
     (princ "Indices ")
+    (terpri)
     ;;(princ indices)
 
-    (terpri)
+    ;; Print indices of pairs
+    (princ (format-string "Pair"))
+    (let
+        (
+         (i 0)
+         )
+      (while (< i the-length)
+        (let*
+            (
+             (pair (aref indices i))
+             (index-a (pair-index-a pair))
+             (word (aref sequence-a index-a))
+             (type (pair-type pair))
+             )
+          (princ (format-integer i))
+          )
+        (setq i (+ i 1))
+        )
+      (terpri)
+      )
+
+    ;; Print types
+    (princ (format-string "Types"))
+    (let
+        (
+         (i 0)
+         )
+      (while (< i the-length)
+        (let*
+            (
+             (pair (aref indices i))
+             (type-string (pair-type-string pair))
+             )
+          (princ (format-string type-string))
+          )
+        (setq i (+ i 1))
+        )
+      (terpri)
+      )
+
+
+    ;; Print indices of words in document-a
+    (princ (format-string "Index A"))
+    (let
+        (
+         (i 0)
+         )
+      (while (< i the-length)
+        (let*
+            (
+             (pair (aref indices i))
+             (index-a (pair-index-a pair))
+             (type (pair-type pair))
+             )
+          (princ (format-integer index-a))
+          )
+        (setq i (+ i 1))
+        )
+      (terpri)
+      )
+
+
+    ;; Print document-a
+    (princ (format-string "Word A"))
+    (let
+        (
+         (i 0)
+         )
+      (while (< i the-length)
+        (let*
+            (
+              (pair (aref indices i))
+              (index-a (pair-index-a pair))
+              (word (aref sequence-a index-a))
+              (type (pair-type pair))
+              )
+          (if (= type TYPE-INSERTION)
+              (princ (format-string ""))
+            (princ (format-string word)))
+          )
+        (setq i (+ i 1))
+        )
+      (terpri)
+      )
+
+    ;; Print a new line
     (terpri)
     )
   nil
