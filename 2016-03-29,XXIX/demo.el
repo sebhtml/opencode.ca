@@ -9,10 +9,10 @@
 (setq SCORE-MATCH +1)
 (setq SCORE-MISMATCH -1)
 
-(setq DIRECTION-NONE -1)
-(setq DIRECTION-LEFT 0)
-(setq DIRECTION-UP 1)
-(setq DIRECTION-LEFT-UP 2)
+(setq DIRECTION-NONE 0)
+(setq DIRECTION-LEFT 1)
+(setq DIRECTION-UP 2)
+(setq DIRECTION-LEFT-UP 3)
 
 (defun print-similarity-value (value)
   (if (> value 0)
@@ -261,6 +261,7 @@
                 (
                  (current-similarity-score (matrix-get-cell similarity-matrix row column))
                  (max-dynamic-programming-score 0)
+                 (max-direction DIRECTION-NONE)
                  (previous-row (- row 1))
                  (previous-column (- column 1))
                  )
@@ -272,7 +273,10 @@
                        (dynamic-programming-score (+ previous-dynamic-programming-score current-similarity-score))
                        )
                     (if (> dynamic-programming-score max-dynamic-programming-score)
-                        (setq max-dynamic-programming-score dynamic-programming-score)
+                        (progn
+                          (setq max-dynamic-programming-score dynamic-programming-score)
+                          (setq max-direction DIRECTION-LEFT-UP)
+                          )
                       nil)
                     )
                                         ; Check gap score with row
@@ -283,7 +287,9 @@
                          (dynamic-programming-score (+ previous-dynamic-programming-score SCORE-GAP))
                          )
                       (if (> dynamic-programming-score max-dynamic-programming-score)
-                          (setq max-dynamic-programming-score dynamic-programming-score)
+                          (progn
+                            (setq max-dynamic-programming-score dynamic-programming-score)
+                            (setq max-direction DIRECTION-UP))
                         nil)
                       )
                                         ; check gap score with column
@@ -294,13 +300,16 @@
                            (dynamic-programming-score (+ previous-dynamic-programming-score SCORE-GAP))
                            )
                         (if (> dynamic-programming-score max-dynamic-programming-score)
-                            (setq max-dynamic-programming-score dynamic-programming-score)
+                            (progn
+                              (setq max-dynamic-programming-score dynamic-programming-score)
+                              (setq max-direction DIRECTION-LEFT))
                           nil))
                     nil
                     )
                   )
                 )
               (matrix-set-cell dynamic-programming-matrix row column max-dynamic-programming-score)
+              (matrix-set-cell direction-matrix row column max-direction)
               )
             (setq column (+ column 1))
             )
