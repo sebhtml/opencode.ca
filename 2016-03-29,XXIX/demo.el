@@ -267,7 +267,9 @@
                  )
               ; check diagonal
                                         ; https://en.wikipedia.org/wiki/Smith%E2%80%93Waterman_algorithm
-              (if (and (>= previous-row 0) (>= previous-column 0) (> current-similarity-score 0))
+              (if (and (>= previous-row 0) (>= previous-column 0)
+                       ;(> current-similarity-score 0)
+                       )
                   (let*
                       ((previous-dynamic-programming-score (matrix-get-cell dynamic-programming-matrix previous-row previous-column))
                        (dynamic-programming-score (+ previous-dynamic-programming-score current-similarity-score))
