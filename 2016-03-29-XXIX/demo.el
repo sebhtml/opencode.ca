@@ -534,7 +534,7 @@
       (
        (i 0)
        )
-    (while (< i (length (document-sequence document-a)))
+    (while (< i (length (document-sequence document-b)))
       (princ (format-string (aref (document-sequence document-b) i)))
       (setq i (+ i 1))
       ))
@@ -1023,13 +1023,13 @@
        (text-a (load-document "text-a.txt"))
        )
 
-    (align-documents ref text-a)
+    ;;(align-documents ref text-a)
     ;;(align-documents ref my-text)
     ;;(align-documents hello hello)
     ;;(align-documents my-text my-text)
      ;;(align-documents gnu-emacs-wikipedia-page my-text)
      ;;(align-documents spacemacs-github-page my-text)
-     ;;(align-documents spacemacs-twitter-page my-text)
+     (align-documents spacemacs-twitter-page my-text)
   ))
 
 
