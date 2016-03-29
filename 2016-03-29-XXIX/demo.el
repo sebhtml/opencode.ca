@@ -1028,8 +1028,8 @@
     ;;(align-documents hello hello)
     ;;(align-documents my-text my-text)
      ;;(align-documents gnu-emacs-wikipedia-page my-text)
-     ;;(align-documents spacemacs-github-page my-text)
-     (align-documents spacemacs-twitter-page my-text)
+     (align-documents spacemacs-github-page my-text)
+     ;;(align-documents spacemacs-twitter-page my-text)
   ))
 
 
