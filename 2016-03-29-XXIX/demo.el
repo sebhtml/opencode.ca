@@ -328,8 +328,19 @@
       (setq direction (matrix-get-cell direction-matrix my-row my-column))
 
       )
+
+    (let*
+        (
+         (similarity-score (matrix-get-cell similarity-matrix my-row my-column))
+         (pair (make-pair :index-a my-row :index-b my-column :type (if (> similarity-score 0) TYPE-MATCH TYPE-MISMATCH)))
+         )
+      (setq pair-list (cons pair pair-list))
+      )
     pair-list
-    ))
+
+    )
+
+  )
 
 (defun alignment-generate-indices-bad (similarity-matrix dynamic-programming-matrix direction-matrix row column)
   (let*
