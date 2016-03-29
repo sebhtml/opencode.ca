@@ -1,2 +1,1 @@
-* sort alignments
 * an alignment can not start with a mismatch

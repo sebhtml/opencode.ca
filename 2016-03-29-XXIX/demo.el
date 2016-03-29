@@ -93,7 +93,8 @@
   (princ (format " %10d" value)))
 ;;(princ (format "%4s" "."))))
 
-
+(defun alignment-compare (a b)
+  (< (length (alignment-indices a)) (length (alignment-indices b))))
 
 (defun alignment-print (this)
   ;;)
@@ -823,7 +824,7 @@
         )
       (setq row (+ row 1)))
 
-    alignments
+    (reverse (sort alignments 'alignment-compare))
     )
   )
 
