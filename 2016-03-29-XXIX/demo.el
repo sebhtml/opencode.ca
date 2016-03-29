@@ -352,9 +352,13 @@
     (let*
         (
          (similarity-score (matrix-get-cell similarity-matrix my-row my-column))
-         (pair (make-pair :index-a my-row :index-b my-column :type (if (> similarity-score 0) TYPE-MATCH TYPE-MISMATCH)))
+         (type (if (> similarity-score 0) TYPE-MATCH TYPE-MISMATCH))
+         (pair (make-pair :index-a my-row :index-b my-column :type type))
          )
-      (setq pair-list (cons pair pair-list))
+      (if (= type TYPE-MATCH)
+          (setq pair-list (cons pair pair-list))
+        nil
+        )
       )
     pair-list
 
@@ -925,7 +929,7 @@
 
   (princ (format "------------------------------------------------------------------------------"))
   (terpri)
-    (princ "Alignments"
+    (princ "Start of alignments"
            )
     (terpri)
     (terpri)
@@ -993,6 +997,7 @@
     (princ
      "End of alignments")
     (terpri)
+    (terpri)
 
        )
 
@@ -1025,13 +1030,13 @@
        (text-a (load-document "text-a.txt"))
        )
 
-    ;;(align-documents ref text-a)
-    ;;(align-documents ref my-text)
-    ;;(align-documents hello hello)
-    ;;(align-documents my-text my-text)
-     ;;(align-documents gnu-emacs-wikipedia-page my-text)
+    (align-documents ref text-a)
+    (align-documents ref my-text)
+    (align-documents hello hello)
+    (align-documents my-text my-text)
      (align-documents spacemacs-github-page my-text)
-     ;;(align-documents spacemacs-twitter-page my-text)
+     (align-documents spacemacs-twitter-page my-text)
+     ;;(align-documents gnu-emacs-wikipedia-page my-text)
   ))
 
 
