@@ -1,0 +1,1 @@
+Batman is strong. The best editor is obviously neither Emacs nor Vim, it's *and* Vim!

@@ -1,0 +1,1 @@
+The best editor is neither Emacs nor Vim, it's Emacs *and* Vim!
