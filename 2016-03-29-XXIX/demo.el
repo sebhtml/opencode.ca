@@ -153,7 +153,7 @@
 
     ;; Print types
     (if print-indices (progn
-    (princ (format-string "Types"))
+    (princ (format-string "Type"))
     (let
         (
          (i 0)
@@ -207,7 +207,7 @@
             (
               (pair (aref indices i))
               (index-a (pair-index-a pair))
-              (word (aref sequence-a index-a))
+              (word (if (= index-a -1) "" (aref sequence-a index-a)))
               (type (pair-type pair))
               )
           (if (= type TYPE-INSERTION)
@@ -253,7 +253,7 @@
             (
              (pair (aref indices i))
              (index-b (pair-index-b pair))
-             (word (aref sequence-b index-b))
+             (word (if (= index-b -1) "" (aref sequence-b index-b)))
              (type (pair-type pair))
              )
           (if (= type TYPE-DELETION)
@@ -301,23 +301,41 @@
        (pair-list (list))
        )
     (while (not (= direction DIRECTION-NONE))
-      (let*
-          (
-           (similarity-score (matrix-get-cell similarity-matrix my-row my-column))
-           (pair (make-pair :index-a my-row :index-b my-column :type (if (> similarity-score 0) TYPE-MATCH TYPE-MISMATCH)))
-           )
-        (setq pair-list (cons pair pair-list))
-        )
       (if (= direction DIRECTION-LEFT-UP)
           (progn
+            (let*
+                (
+                 (similarity-score (matrix-get-cell similarity-matrix my-row my-column))
+                 (pair (make-pair :index-a my-row :index-b my-column :type (if (> similarity-score 0) TYPE-MATCH TYPE-MISMATCH)))
+                 )
+              (setq pair-list (cons pair pair-list))
+              )
+
+
             (setq my-row (- my-row 1))
             (setq my-column (- my-column 1)))
         (if (= direction DIRECTION-LEFT)
             (progn
+              (let*
+                  (
+                   (similarity-score (matrix-get-cell similarity-matrix my-row my-column))
+                   (pair (make-pair :index-a my-row :index-b my-column :type TYPE-INSERTION))
+                   )
+                (setq pair-list (cons pair pair-list))
+                )
+
               (setq my-row (- my-row 0))
               (setq my-column (- my-column 1)))
           (if (= direction DIRECTION-UP)
               (progn
+                (let*
+                    (
+                     (similarity-score (matrix-get-cell similarity-matrix my-row my-column))
+                     (pair (make-pair :index-a my-row :index-b my-column :type TYPE-DELETION))
+                     )
+                  (setq pair-list (cons pair pair-list))
+                  )
+
                 (setq my-row (- my-row 1))
                 (setq my-column (- my-column 0)))
             nil
