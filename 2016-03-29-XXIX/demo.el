@@ -18,7 +18,7 @@
 (setq max-specpdl-size 999999)
 (setq max-lisp-eval-depth 999999)
 
-(setq OPTION-PRINT-MATRIX nil)
+(setq OPTION-PRINT-MATRIX t)
 
 ;; The gap scoring model is simple: there is no opening cost, and the gap extension cost is SCORE-DELETION or SCORE-INSERTION
 (setq SCORE-DELETION -1)
@@ -294,6 +294,46 @@
 (defun alignment-generate-indices (similarity-matrix dynamic-programming-matrix direction-matrix row column)
   (let*
       (
+       (my-row row)
+       (my-column column)
+       (similarity-score (matrix-get-cell similarity-matrix my-row my-column))
+       (direction (matrix-get-cell direction-matrix my-row my-column))
+       (pair-list (list))
+       )
+    (while (not (= direction DIRECTION-NONE))
+      (let*
+          (
+           (similarity-score (matrix-get-cell similarity-matrix my-row my-column))
+           (pair (make-pair :index-a my-row :index-b my-column :type (if (> similarity-score 0) TYPE-MATCH TYPE-MISMATCH)))
+           )
+        (setq pair-list (cons pair pair-list))
+        )
+      (if (= direction DIRECTION-LEFT-UP)
+          (progn
+            (setq my-row (- my-row 1))
+            (setq my-column (- my-column 1)))
+        (if (= direction DIRECTION-LEFT)
+            (progn
+              (setq my-row (- my-row 0))
+              (setq my-column (- my-column 1)))
+          (if (= direction DIRECTION-UP)
+              (progn
+                (setq my-row (- my-row 1))
+                (setq my-column (- my-column 0)))
+            nil
+            )
+          )
+        )
+
+      (setq direction (matrix-get-cell direction-matrix my-row my-column))
+
+      )
+    pair-list
+    ))
+
+(defun alignment-generate-indices-bad (similarity-matrix dynamic-programming-matrix direction-matrix row column)
+  (let*
+      (
        (similarity-score (matrix-get-cell similarity-matrix row column))
        (direction (matrix-get-cell direction-matrix row column))
        (pair (make-pair :index-a row :index-b column :type (if (> similarity-score 0) TYPE-MATCH TYPE-MISMATCH)))
@@ -347,7 +387,7 @@
   (let*
       (
        (last-pair (make-pair :index-a row :index-b column :type TYPE-MATCH))
-       (my-list (reverse (alignment-generate-indices similarity-matrix dynamic-programming-matrix direction-matrix row column)))
+       (my-list (alignment-generate-indices similarity-matrix dynamic-programming-matrix direction-matrix row column))
        (indices (vconcat (vector) my-list))
     (match-count (get-match-count indices))
     ;;(match-count 0)
