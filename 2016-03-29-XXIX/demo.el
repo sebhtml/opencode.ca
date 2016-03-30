@@ -18,7 +18,7 @@
 (setq max-specpdl-size 999999)
 (setq max-lisp-eval-depth 999999)
 
-(setq OPTION-PRINT-MATRIX nil)
+(setq OPTION-PRINT-MATRIX t)
 (setq OPTION-PRINT-INDICES t)
 
 ;; The gap scoring model is simple: there is no opening cost, and the gap extension cost is SCORE-DELETION or SCORE-INSERTION
